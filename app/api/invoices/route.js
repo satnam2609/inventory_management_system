@@ -150,6 +150,7 @@ export async function PUT(request) {
     if (startDate || endDate) {
       await connectDb();
       const dateRangeQuery = {};
+
       if (startDate) {
         dateRangeQuery.$gte = new Date(startDate);
       }

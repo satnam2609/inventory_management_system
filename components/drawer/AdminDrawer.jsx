@@ -65,7 +65,7 @@ export default function AdminDrawer() {
           }}
         />
       ),
-      name: "categoires",
+      name: "categories",
     },
     {
       route: "items",
@@ -97,18 +97,18 @@ export default function AdminDrawer() {
       ),
       name: "invoices",
     },
-    {
-      route: "record-sales",
-      icon: (
-        <InsertDriveFileIcon
-          sx={{
-            // color: theme.palette.secondary["A100"],
-            fontSize: "2rem",
-          }}
-        />
-      ),
-      name: "sales",
-    },
+    // {
+    //   route: "record-sales",
+    //   icon: (
+    //     <InsertDriveFileIcon
+    //       sx={{
+    //         // color: theme.palette.secondary["A100"],
+    //         fontSize: "2rem",
+    //       }}
+    //     />
+    //   ),
+    //   name: "sales",
+    // },
     {
       route: "analytics",
       icon: (

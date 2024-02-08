@@ -10,17 +10,20 @@ export async function POST(request) {
   try {
     const session = await getServerSession(authOptions);
     const { id, quantity, grandTotal } = await request.json();
+
     await connectDb();
     if (session) {
       const prod = await Product.findOne({ _id: id });
       const user = await User.findOne({ email: session?.user?.email });
+
+      let retailerPrice = parseInt(prod.price * 0.85);
 
       const invoice = await Invoice.create({
         products: [
           {
             product: id,
             quantity,
-            price: prod.price,
+            price: retailerPrice,
             category: prod.category,
           },
         ],

@@ -56,7 +56,7 @@ export default function InvoicePage() {
       setData(newRes);
       setDataLength(total);
     });
-  }, [filtered, dateRange]);
+  }, [filtered, dateRange, page]);
 
   console.log(dateRange);
 

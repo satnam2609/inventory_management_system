@@ -17,6 +17,7 @@ import {
 import DataTable from "@/utils/DataTable";
 import FlexBetween from "@/utils/FlexBetween";
 import UpdateProductModal from "../modal/UpdateProduct";
+import Link from "next/link";
 
 export default function ItemsDisplay({ isFiletered, setIsFiltered, category }) {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -139,7 +140,11 @@ export default function ItemsDisplay({ isFiletered, setIsFiltered, category }) {
       title: "ID",
       dataIndex: "_id",
       width: "5%",
-      render: (text) => <a>{"..." + text.slice(-4)}</a>,
+      render: (text, record) => (
+        <Link href={`/admin/sales/${record.slug}`}>
+          {"..." + text.slice(-4)}
+        </Link>
+      ),
     },
     {
       title: "Name",

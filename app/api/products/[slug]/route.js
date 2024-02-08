@@ -14,9 +14,6 @@ export async function PUT(request, { params }) {
         { status: 304 }
       );
     } else {
-      if (reqBody.count > 0) {
-        reqBody.count = 0;
-      }
       const product = await Product.findOneAndUpdate(
         { slug },
         { ...reqBody, slug: slugify(reqBody.name) },

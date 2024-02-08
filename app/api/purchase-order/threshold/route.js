@@ -18,13 +18,19 @@ export async function POST(request) {
           $expr: { $gte: ["$minCount", "$count"] },
         },
       },
-    ])
-      .limit(perPage)
-      .skip((currentPage - 1) * perPage);
+      { $skip: (currentPage - 1) * perPage },
+      { $limit: perPage },
+    ]);
 
-    total = productsLists.length;
+    total = await Product.countDocuments([
+      {
+        $match: {
+          $expr: { $gte: ["$minCount", "$count"] },
+        },
+      },
+    ]);
 
-    if (productsLists.length > 0) {
+    if (productsLists.length) {
       return NextResponse.json({
         message: {
           thresholds: productsLists,

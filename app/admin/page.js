@@ -1,3 +1,4 @@
+import LineGraph from "@/components/line/LineGraph";
 import FlexBetween from "@/utils/FlexBetween";
 import Headers from "@/utils/Header";
 

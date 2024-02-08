@@ -17,6 +17,7 @@ export const getProducts = async () => {
   const res = await axios.get("http://localhost:3000/api/products");
   return res.data.message;
 };
+
 export const getProductsByPagination = async (page) => {
   const res = await axios.post(
     `http://localhost:3000/api/products/pagination`,

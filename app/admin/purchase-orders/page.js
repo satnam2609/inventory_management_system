@@ -32,7 +32,7 @@ export default function POPage() {
       setData(newRes);
       setDataLength(total);
     });
-  }, []);
+  }, [page.current]);
   async function loadThresholds() {
     const res = await getThresholds(page.current);
 
@@ -98,7 +98,7 @@ export default function POPage() {
           <div>
             <OrderMoreModal
               id={record._id}
-              price={record.price}
+              price={parseInt(record.price * 0.85)}
               category={record.category}
             />
           </div>

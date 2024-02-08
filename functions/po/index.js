@@ -3,7 +3,7 @@ import axios from "axios";
 export const getThresholds = async (page) => {
   const res = await axios.post(
     "http://localhost:3000/api/purchase-order/threshold",
-    { page }
+    { page: page }
   );
   return res.data.message;
 };

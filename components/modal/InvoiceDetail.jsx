@@ -58,32 +58,7 @@ export default function InvoiceDetail({ id }) {
     return res;
   }
 
-  function handleChange(ev) {
-    setName(ev.target.value);
-  }
-
-  function handleSubmit(ev) {
-    ev.preventDefault();
-
-    // try {
-    //   setLoading(true);
-    //   createCategory(name).then((res) => {
-    //     if (res.success) {
-    //       message.success(`${res.message.name} created!`);
-    //       setNew(true);
-    //     }
-    //   });
-
-    //   setLoading(false);
-    //   setName("");
-    //   handleClose();
-    // } catch (error) {
-    //   message.error(res.message);
-    //   setLoading(false);
-    //   setName("");
-    //   handleClose();
-    // }
-  }
+  console.log(invoiceData);
 
   return (
     <div>
@@ -159,6 +134,7 @@ export default function InvoiceDetail({ id }) {
                     key={p.product.id} // Assuming product has an 'id' property
                     product={p.product}
                     quantity={p.quantity}
+                    price={p.price}
                   />
                 ))}
               </tbody>

@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 
-export default function ProductInInvoice({ product, quantity }) {
-  const { name, price, _id } = product;
+export default function ProductInInvoice({ product, quantity, price }) {
+  const { name, _id } = product;
 
   return (
     <tr className="text-sm">
