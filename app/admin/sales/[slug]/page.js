@@ -1,7 +1,7 @@
 import { getProduct } from "@/functions/products";
 import FlexBetween from "@/utils/FlexBetween";
 import Headers from "@/utils/Header";
-import { get } from "../action";
+import { get, sold } from "../action";
 import LineGraph from "@/components/line/LineGraph";
 import { Card } from "@mui/material";
 
@@ -12,7 +12,8 @@ import PieChart from "@/components/pie/PieChart";
 export default async function ProductSalePage({ params }) {
   const { slug } = params;
   const product = await getProduct(slug);
-  const data = await get(product._id, "", "");
+  const data = await get(product._id, 1);
+  const pieData = await sold(product._id);
 
   return (
     <div className="w-full h-full">
@@ -23,6 +24,17 @@ export default async function ProductSalePage({ params }) {
           <p className="text-xl">Revenue by product</p>:
           <p className="text-4xl font-bold text-[#121212]">
             &#8377;{calculateRevenueByProduct(data[0].data)}
+          </p>
+        </FlexBetween>
+
+        <FlexBetween className="gap-2">
+          <p className="text-xl">ROI</p>:
+          <p className="text-4xl font-bold text-[#121212]">
+            {Math.round(
+              (pieData.totalSolds * parseInt(product.price) * 100) /
+                pieData.totalInvested
+            )}
+            %
           </p>
         </FlexBetween>
 
@@ -48,7 +60,7 @@ export default async function ProductSalePage({ params }) {
               {
                 id: "sold",
                 label: "sold",
-                value: data[0].data.length,
+                value: pieData.totalSolds,
                 color: "hsl(149, 100%, 46%)",
               },
               {

@@ -3,15 +3,13 @@
 import { useEffect, useState } from "react";
 import LineGraph from "../line/LineGraph";
 import FlexBetween from "@/utils/FlexBetween";
-import { ConfigProvider, DatePicker, Space, Spin } from "antd";
+import { Select } from "antd";
 import { Box } from "@mui/material";
-
-const { RangePicker } = DatePicker;
 
 export default function SalesOfProduct({ id, get }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [dateRange, setDateRange] = useState([]);
+  const [code, setCode] = useState(1);
 
   useEffect(() => {
     setLoading(true);
@@ -21,31 +19,26 @@ export default function SalesOfProduct({ id, get }) {
         setData(res);
       }
     });
-  }, [dateRange]);
+  }, [code]);
 
   async function loadData() {
-    const res = await get(id, new Date(dateRange[0]), new Date(dateRange[1]));
+    const res = await get(id, code);
     return res;
   }
 
   return (
     <Box height="55vh" className="col-span-4">
       <FlexBetween className="px-4">
-        <ConfigProvider
-          theme={{
-            components: {
-              DatePicker: {
-                padding: 20,
-              },
-            },
-          }}
-        >
-          <RangePicker
-            className="px-3"
-            defaultValue
-            onChange={(_, values) => setDateRange(values)}
-          />
-        </ConfigProvider>
+        <Select
+          defaultValue={1}
+          onChange={(val) => setCode(val)}
+          style={{ width: 120 }}
+          options={[
+            { value: 1, label: "Daily" },
+            { value: 2, label: "Monthly" },
+            { value: 4, label: "Yearly" },
+          ]}
+        />
       </FlexBetween>
       <LineGraph data={data} />
     </Box>
