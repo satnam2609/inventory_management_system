@@ -9,3 +9,8 @@ export async function getSalesByCategory(category) {
 
   return response.data.resultArray;
 }
+
+export async function getTotalRevenue() {
+  const response = await axios.get("http://localhost:3000/api/analytics");
+  return response.data.message;
+}

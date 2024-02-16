@@ -59,3 +59,26 @@ export async function POST(request) {
     );
   }
 }
+
+export async function GET() {
+  try {
+    await connectDb();
+    const invoices = await Invoice.find({
+      type: false,
+    });
+    const totalRevenue = Math.round(
+      invoices.reduce((total, invoice) => {
+        total += invoice.grandTotal;
+        return total;
+      }, 0)
+    );
+
+    return NextResponse.json({ message: totalRevenue, success: true });
+  } catch (error) {
+    console.log("Error total revenue", error);
+    return NextResponse.json(
+      { message: "Internal server error", success: false },
+      { status: 500 }
+    );
+  }
+}
