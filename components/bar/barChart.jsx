@@ -13,7 +13,7 @@ export const BarChart = ({ data }) => (
     keys={data ? Object.keys(data[0]).filter((key) => key !== "month") : null} // Exclude 'month' key
     indexBy="month"
     margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
-    padding={0.7}
+    padding={0.5}
     colors={{ scheme: "nivo" }}
     enableLabel={false}
     axisBottom={{
@@ -42,7 +42,7 @@ export const BarChart = ({ data }) => (
         justify: false,
         translateX: 120,
         translateY: 0,
-        itemsSpacing: 0,
+        itemsSpacing: 3,
         itemWidth: 100,
         itemHeight: 20,
         itemDirection: "left-to-right",
