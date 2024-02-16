@@ -20,7 +20,7 @@ export async function POST(request) {
             },
           },
           type: false,
-        }).sort({ createdAt: 1 });
+        }).sort({ createdAt: -1 });
 
         invoices.forEach((invoice) => {
           const monthVal = moment(invoice.createdAt).format("MMMM");

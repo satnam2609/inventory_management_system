@@ -11,44 +11,6 @@ export async function POST(request) {
     const session = await getServerSession(authOptions);
     const { products, grandTotal, email } = await request.json();
 
-    // if (type) {
-    //   //If type is true then issuedby Id  as well as the email must the admin
-    //   let admin = await User.find({ role: "admin" });
-    //   const user = await User.findOne({ email: session?.user?.email }).select(
-    //     "_id"
-    //   );
-
-    //   if (user._id === admin._id) {
-    //     await connectDb();
-    //     if (Array.isArray(products)) {
-    //       const invoice = await Invoice.create({
-    //         products,
-    //         issuedBy: user._id,
-    //         grandTotal,
-    //         email,
-    //         type: true,
-    //       });
-
-    //       //we need to update the count of each product
-    //       products.map(async (p) => {
-    //         let prodId = p.product;
-    //         let count = parseInt(p.quantity);
-    //         const product = await Product.findOne({ _id: prodId });
-    //         await Product.findOneAndUpdate(
-    //           { _id: prodId },
-    //           { count: product.count + count },
-    //           { new: true }
-    //         );
-    //       });
-
-    //       return NextResponse.json(
-    //         { message: invoice, success: true },
-    //         { status: 201 }
-    //       );
-    //     }
-    //   }
-    // }
-
     const user = await User.findOne({ email: session?.user?.email }).select(
       "_id"
     );
@@ -160,7 +122,7 @@ export async function PUT(request) {
 
       const invoices = await Invoice.find({
         createdAt: dateRangeQuery,
-      });
+      }).sort({ createdAt: -1 });
 
       const total = await Invoice.find({
         createdAt: dateRangeQuery,

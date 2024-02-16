@@ -131,7 +131,7 @@ export default function InvoiceDetail({ id }) {
               <tbody className="bg-white divide-y divide-gray-200">
                 {invoiceData?.products?.map((p) => (
                   <ProductInInvoice
-                    key={p.product.id} // Assuming product has an 'id' property
+                    key={p.product} // Assuming product has an 'id' property
                     product={p.product}
                     quantity={p.quantity}
                     price={p.price}

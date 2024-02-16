@@ -7,14 +7,14 @@ import { ResponsiveBar } from "@nivo/bar";
 // no chart will be rendered.
 // website examples showcase many properties,
 // you'll often use just a few of them.
-export const BarChart = ({ data, productKeys }) => (
+export const BarChart = ({ data }) => (
   <ResponsiveBar
     data={data}
-    keys={Object.keys(data[0]).filter((key) => key !== "month")} // Exclude 'month' key
+    keys={data ? Object.keys(data[0]).filter((key) => key !== "month") : null} // Exclude 'month' key
     indexBy="month"
-    margin={{ top: 50, right: 200, bottom: 50, left: 100 }}
-    padding={0.3}
-    colors={{ scheme: "greens" }}
+    margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
+    padding={0.7}
+    colors={{ scheme: "nivo" }}
     enableLabel={false}
     axisBottom={{
       tickSize: 5,
@@ -27,7 +27,7 @@ export const BarChart = ({ data, productKeys }) => (
     axisLeft={{
       tickSize: 5,
       tickPadding: 5,
-      tickRotation: 2,
+      tickRotation: 0,
       legend: "Sales",
       legendPosition: "middle",
       legendOffset: -40,
@@ -42,7 +42,7 @@ export const BarChart = ({ data, productKeys }) => (
         justify: false,
         translateX: 120,
         translateY: 0,
-        itemsSpacing: 2,
+        itemsSpacing: 0,
         itemWidth: 100,
         itemHeight: 20,
         itemDirection: "left-to-right",
