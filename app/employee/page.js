@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { message } from "antd";
 import { createBill } from "@/functions/invoice";
 import { useRouter } from "next/navigation";
+import GrandTotalModal from "@/components/modal/GrandTotal";
 
 export default function AddBillPage() {
   const [email, setEmail] = useState("");
@@ -16,6 +17,7 @@ export default function AddBillPage() {
   const [bill, setBill] = useState({});
   const [grandTotal, setGrandTotal] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -36,14 +38,18 @@ export default function AddBillPage() {
           console.log(res);
           setLoading(false);
           setBill({});
-
-          router.replace("/admin/invoices");
+          setOpen(false);
+          setGrandTotal(0);
+          setBill({});
+          setEmail("");
         })
         .catch((err) => {
           message.error(err);
           console.log(err);
           setLoading(false);
           setBill({});
+          setEmail("");
+          setOpen(false);
         });
     } else {
       message.warning("Please fill all fields");
@@ -70,15 +76,22 @@ export default function AddBillPage() {
 
           <button
             className="bg-[#121212] px-4 py-3 text-[#fff]"
-            onClick={handleConfirm}
+            onClick={() => setOpen(true)}
           >
             Confirm
           </button>
+          <GrandTotalModal
+            open={open}
+            setOpen={setOpen}
+            grandTotal={parseInt(grandTotal)}
+            handleConfirm={handleConfirm}
+          />
         </FlexBetween>
       </FlexBetween>
 
       {/* Form  */}
       <AddProdIntoInvoice
+        open={open}
         products={products}
         setProducts={setProducts}
         setGrandTotal={setGrandTotal}

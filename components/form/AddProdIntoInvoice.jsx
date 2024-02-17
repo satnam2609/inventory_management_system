@@ -27,7 +27,7 @@ import { getCategories } from "@/functions/category";
 export default function AddProdIntoInvoice({
   products,
   setProducts,
-
+  open,
   setGrandTotal,
 }) {
   const [category, setCategory] = useState();
@@ -85,7 +85,7 @@ export default function AddProdIntoInvoice({
     }
 
     setLoading(false);
-  }, [page, isFiletered, category]);
+  }, [page, isFiletered, open, category]);
 
   async function loadCategories() {
     return await getCategories();
