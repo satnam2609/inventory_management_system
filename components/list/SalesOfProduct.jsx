@@ -40,7 +40,7 @@ export default function SalesOfProduct({ id, get }) {
           ]}
         />
       </FlexBetween>
-      <LineGraph data={data} />
+      <LineGraph data={data} enbaleArea={false} grid={true} />
     </Box>
   );
 }

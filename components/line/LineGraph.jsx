@@ -2,7 +2,7 @@
 
 import { ResponsiveLine } from "@nivo/line";
 
-export default function LineGraph({ data }) {
+export default function LineGraph({ data, enbaleArea, grid }) {
   return (
     <ResponsiveLine
       data={data}
@@ -20,11 +20,13 @@ export default function LineGraph({ data }) {
       axisBottom={{
         tickSize: 5,
         tickPadding: 5,
-        tickRotation: 0,
+        tickRotation: -45,
         legend: "Date of invoice",
         legendOffset: 36,
         legendPosition: "middle",
       }}
+      enableArea={enbaleArea}
+      areaOpacity={0.05}
       axisLeft={{
         orient: "left",
         tickSize: 5,
@@ -41,6 +43,8 @@ export default function LineGraph({ data }) {
       pointLabelYOffset={-12}
       colors={"hsl(124.9, 100%, 25.5%)"}
       useMesh={true}
+      enableGridX={grid}
+      enableGridY={grid}
       legends={[
         {
           anchor: "bottom",

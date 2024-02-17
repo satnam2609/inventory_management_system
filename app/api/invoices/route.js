@@ -153,3 +153,23 @@ export async function PUT(request) {
     );
   }
 }
+
+//This endpoint is used to fetch the totalInvested amount
+export async function GET() {
+  try {
+    await connectDb();
+    const invoices = await Invoice.find({ type: true });
+    const investedAmount = invoices.reduce((total, invoice) => {
+      total += invoice.grandTotal;
+      return total;
+    }, 0);
+
+    return NextResponse.json({ message: investedAmount, success: true });
+  } catch (error) {
+    console.log("Error", error);
+    return NextResponse.json(
+      { message: "Internal server error", success: false },
+      { status: 500 }
+    );
+  }
+}
