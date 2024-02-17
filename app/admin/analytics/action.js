@@ -17,7 +17,7 @@ export async function getTotalRevenue() {
 
 export async function getCategoryWiseRevenue(id) {
   const response = await axios.post(
-    `http://localhost:3000/api/invoices/${id}`,
+    `http://localhost:3000/api/analytics/${id}`,
     {}
   );
   return response.data.message;

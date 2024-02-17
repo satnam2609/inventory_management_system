@@ -9,24 +9,48 @@ export async function POST(request, { params }) {
     await connectDb();
     const invoices = await Invoice.find({
       products: { $elemMatch: { category: id } },
-      type: false,
     }).sort({ createdAt: -1 });
-    let total = 0,
-      objects = []; //array of objects from the products field from Invoice
+    let totalInvested = 0,
+      totalReturned = 0,
+      objectsForReturned = [],
+      objectsForInvested = []; //array of objects from the products field from Invoice
     invoices.forEach((invoice) => {
-      invoice.products.map((item) => {
-        if (String(item.category) === id) {
-          objects.push(item);
-        }
-      });
+      if (!invoice.type) {
+        invoice.products.map((item) => {
+          if (String(item.category) === id) {
+            objectsForReturned.push(item);
+          }
+        });
+      }
     });
 
-    total = objects.reduce((total, item) => {
+    totalReturned = objectsForReturned.reduce((total, item) => {
       total += parseInt(item.quantity) * parseInt(item.price);
       return total;
     }, 0);
 
-    return NextResponse.json({ message: total, success: true });
+    invoices.forEach((invoice) => {
+      if (invoice.type) {
+        invoice.products.map((item) => {
+          if (String(item.category) === id) {
+            objectsForInvested.push(item);
+          }
+        });
+      }
+    });
+
+    totalInvested = objectsForInvested.reduce((total, item) => {
+      total += parseInt(item.quantity) * parseInt(item.price);
+      return total;
+    }, 0);
+
+    return NextResponse.json({
+      message: {
+        totalInvested,
+        totalReturned,
+      },
+      success: true,
+    });
   } catch (error) {
     console.log("Error Anaytics category wise", error);
     return NextResponse.json(
