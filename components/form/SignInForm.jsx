@@ -5,7 +5,6 @@ import { useSession, signIn } from "next-auth/react";
 import { CircularProgress } from "@mui/material";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { currentUser } from "@/functions/auth";
 
 export default function SignInForm() {
   const router = useRouter();
@@ -34,14 +33,16 @@ export default function SignInForm() {
         setValues(initialState);
         return;
       } else if (res.ok) {
-        currentUser(session?.user.email).then((res) => {
-          setValues(initialState);
-          setLoading(false);
-          if (res) {
-            const route = res?.role;
-            router.push(route);
-          }
-        });
+        setLoading(false);
+        setValues(initialState);
+        // currentUser(session?.user.email).then((res) => {
+        //   setValues(initialState);
+        //   setLoading(false);
+        //   if (res) {
+        //     const route = res?.role;
+        //     router.push(route + "/invoices");
+        //   }
+        // });
       }
 
       // router.push("/dashboard");

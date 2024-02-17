@@ -34,7 +34,7 @@ export default function SignUpForm() {
 
     setLoading(false);
     setValues(initialState);
-    router.push("/dashboard");
+    router.push("/employee/invoices");
   }
 
   function handleChange(ev) {
