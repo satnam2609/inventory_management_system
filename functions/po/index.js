@@ -8,10 +8,11 @@ export const getThresholds = async (page) => {
   return res.data.message;
 };
 
-export const createorder = async (id, quantity, grandTotal) => {
+export const createorder = async (id, quantity, cost, grandTotal) => {
   const res = await axios.post("http://localhost:3000/api/purchase-order", {
     id: id,
     quantity: quantity,
+    cost: cost,
     grandTotal: grandTotal,
   });
 

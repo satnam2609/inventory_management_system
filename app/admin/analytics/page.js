@@ -4,25 +4,22 @@ import { useState, useEffect } from "react";
 import FlexBetween from "@/utils/FlexBetween";
 import Headers from "@/utils/Header";
 
-import {
-  getCategoryWiseRevenue,
-  getSalesByCategory,
-  getTotalRevenue,
-} from "./action";
+import { getSalesByCategory, getValuesForCategory } from "./action";
 import { BarChart } from "@/components/bar/barChart";
 import { getCategories } from "@/functions/category";
 import { ConfigProvider, Select, Statistic } from "antd";
-import moment from "moment";
-import { Card } from "@mui/material";
 
 export default function AnalyticPage() {
   const [categories, setCategories] = useState([]);
   const [data, setData] = useState(null);
   const [category, setCategory] = useState("65a51ad9bee97a698a75c1df");
+  const [totalCOGS, setTotalCOGS] = useState(0);
   const [totalRevenue, setTotalRevenue] = useState(0);
-  const [categoryWiseRevenue, setCategoryWiseRevenue] = useState(0);
-  const [investedInThisCategory, setInvestedInThisCategory] = useState(0);
+
+  const [totalGrossProfit, setTotalGrossProfit] = useState(0);
   const [loading, setLoading] = useState(false);
+
+  const [slug, setSlug] = useState("");
 
   useEffect(() => {
     setLoading(true);
@@ -35,44 +32,29 @@ export default function AnalyticPage() {
           setData(res);
           setLoading(false);
         });
+      })
+      .then(() => {
+        getValues().then((res) => {
+          setTotalRevenue(res.totalRevenue);
+
+          setTotalGrossProfit(res.totalGrossProfit);
+          setTotalCOGS(res.totalCogsCost);
+          setLoading(false);
+        });
       });
   }, [category]);
-
-  useEffect(() => {
-    loadTotalRevenue().then((res) => setTotalRevenue(res));
-  }, [category]);
-
-  useEffect(() => {
-    loadCategoryWiseRevenue().then((res) =>
-      setCategoryWiseRevenue(res.totalReturned)
-    );
-  }, [category]);
-
-  useEffect(() => {
-    loadCategoryWiseRevenue().then((res) =>
-      setInvestedInThisCategory(res.totalInvested)
-    );
-  }, [category]);
-
-  async function loadTotalRevenue() {
-    const response = await getTotalRevenue();
-    return response;
-  }
 
   async function loadData() {
     const result = await getSalesByCategory(category);
     return result;
   }
 
-  async function loadCategoryWiseRevenue() {
-    const result = await getCategoryWiseRevenue(category);
-    return result;
+  async function getValues() {
+    const res = await getValuesForCategory(slug);
+    const { totalRevenue, totalCogsCost, totalGrossProfit, totalAvgInventory } =
+      res;
+    return { totalRevenue, totalCogsCost, totalGrossProfit };
   }
-
-  function calculateROI() {
-    return parseInt((categoryWiseRevenue * 100) / investedInThisCategory);
-  }
-
   return (
     <div className="w-full h-full ">
       <FlexBetween className="px-4 py-3">
@@ -127,10 +109,7 @@ export default function AnalyticPage() {
               },
             }}
           >
-            <Statistic
-              title="Total Revenue by category"
-              value={categoryWiseRevenue}
-            />
+            <Statistic title="Total COGS" value={totalCOGS} />
           </ConfigProvider>
 
           <ConfigProvider
@@ -143,19 +122,7 @@ export default function AnalyticPage() {
               },
             }}
           >
-            <Statistic
-              title={
-                categories
-                  ? `ROI on ${
-                      categories.filter(
-                        (cat) => String(cat._id) === category
-                      )[0]?.name
-                    }`
-                  : "ROI"
-              }
-              value={calculateROI()}
-              suffix={"%"}
-            />
+            <Statistic title="Total Gross Profit" value={totalGrossProfit} />
           </ConfigProvider>
         </div>
       </FlexBetween>

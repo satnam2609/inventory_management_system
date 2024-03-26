@@ -12,8 +12,28 @@ import PieChart from "@/components/pie/PieChart";
 export default async function ProductSalePage({ params }) {
   const { slug } = params;
   const product = await getProduct(slug);
-  const data = await get(product._id, 1);
+
   const pieData = await sold(product._id);
+
+  let Revenue = 0,
+    GrossProfit = 0,
+    COGS = 0;
+
+  //getting the values for the product
+  const response = await fetch(`http://localhost:3000/api/products/values`, {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify({ id: product._id, startDate: "", endDate: "" }),
+  });
+
+  if (response.ok) {
+    const { message } = await response.json();
+    Revenue = message.revenue;
+    GrossProfit = message.grossProfit;
+    COGS = message.cogsCost;
+  }
 
   return (
     <div className="w-full h-full">
@@ -21,27 +41,26 @@ export default async function ProductSalePage({ params }) {
         <Headers text={product.name} description={product.description} />
 
         <FlexBetween className="gap-2">
-          <p className="text-xl">Revenue by product</p>:
-          <p className="text-4xl font-bold text-[#121212]">
-            &#8377;{calculateRevenueByProduct(data[0].data)}
-          </p>
+          <p className="text-xl">Revenue</p>:
+          <p className="text-4xl font-bold text-[#121212]">&#8377;{Revenue}</p>
         </FlexBetween>
 
         <FlexBetween className="gap-2">
-          <p className="text-xl">ROI</p>:
-          <p className="text-4xl font-bold text-[#121212]">
-            {Math.round(
-              (pieData.totalSolds * parseInt(product.price) * 100) /
-                pieData.totalInvested
-            )}
-            %
-          </p>
+          <p className="text-xl">COGS</p>:
+          <p className="text-3xl font-bold text-[#121212]">&#8377;{COGS}</p>
         </FlexBetween>
 
         <FlexBetween className="gap-2">
           <p className="text-xl">Profit margin</p>:
-          <p className="text-4xl font-bold text-[#121212]">
-            {calculateProfitMargin(product.price)}%
+          <p className="text-3xl font-bold text-[#121212]">
+            &#8377;{GrossProfit}
+          </p>
+        </FlexBetween>
+
+        <FlexBetween className="gap-2">
+          <p className="text-xl">Gross margin</p>:
+          <p className="text-3xl font-bold text-[#121212]">
+            &#8377;{(GrossProfit / Revenue).toFixed(2) * 100}%
           </p>
         </FlexBetween>
         {/* Filter by time series */}

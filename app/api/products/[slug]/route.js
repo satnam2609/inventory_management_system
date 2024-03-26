@@ -57,6 +57,7 @@ export async function GET(req, { params }) {
     await connectDb();
     const { slug } = params;
     const product = await Product.findOne({ slug });
+
     return NextResponse.json({ message: product, success: true });
   } catch (error) {
     console.log("Error", error);

@@ -4,12 +4,17 @@ import { productsInBulk } from "@/utils/products";
 import { NextResponse } from "next/server";
 import slugify from "slugify";
 
+function calculateCost(price, count) {
+  return Math.round((3 / 4) * price * count * 100).toString();
+}
+
 export async function GET() {
   try {
     await connectDb();
     const productsWithSlugs = productsInBulk.map((product) => ({
       ...product,
       slug: slugify(product.name),
+      cost: calculateCost(product.price, product.count),
     }));
 
     await Product.insertMany(productsWithSlugs);

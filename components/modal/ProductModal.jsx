@@ -47,9 +47,11 @@ export default function ProductModal() {
   const [loading, setLoading] = useState(false);
   let initialState = {
     name: "",
-    description: "",
+
     category: "",
     price: "",
+
+    cost: "",
 
     minCount: "",
   };
@@ -121,13 +123,7 @@ export default function ProductModal() {
               onChange={handleChange}
               className="w-full"
             />
-            <TextField
-              label="Description"
-              name="description"
-              value={values.description}
-              onChange={handleChange}
-              className="w-full"
-            />
+
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">Category</InputLabel>
               <Select
@@ -155,13 +151,7 @@ export default function ProductModal() {
               onChange={handleChange}
               className="w-full"
             />
-            {/* <TextField
-              label="Count"
-              name="count"
-              value={values.count}
-              onChange={handleChange}
-              className="w-full"
-            /> */}
+
             <TextField
               label="Threshold value"
               name="minCount"

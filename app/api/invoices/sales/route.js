@@ -60,3 +60,45 @@ export async function POST(request) {
     );
   }
 }
+
+export async function PUT(request) {
+  try {
+    const { startDate, endDate } = await request.json();
+    await connectDb();
+
+    let invoices;
+
+    if (startDate || endDate) {
+      const dateRangeQuery = {};
+
+      if (startDate) {
+        dateRangeQuery.$gte = new Date(startDate);
+      }
+      if (endDate) {
+        dateRangeQuery.$lte = new Date(endDate);
+      }
+      invoices = await Invoice.find({
+        type: false,
+        createdAt: dateRangeQuery,
+      });
+    } else {
+      invoices = await Invoice.find({ type: false });
+    }
+
+    const netSalesUnit = invoices.reduce((total, invoice) => {
+      invoice.products.map((p) => {
+        total += p.quantity;
+      });
+
+      return total;
+    }, 0);
+
+    return NextResponse.json({ message: netSalesUnit, success: true });
+  } catch (error) {
+    console.log("Error", error);
+    return NextResponse.json(
+      { message: "Internal server error", success: false },
+      { status: 500 }
+    );
+  }
+}

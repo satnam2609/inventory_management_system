@@ -30,7 +30,7 @@ const style = {
   bgcolor: "background.paper",
   borderRadius: "10px",
   boxShadow: 24,
-  p: 4,
+  p: 3,
   display: "flex",
   flexDirection: "column",
   alignItems: "start",
@@ -51,7 +51,9 @@ export default function UpdateProductModal({
 
   let initialState = {
     name: "",
-    description: "",
+
+    initialInventory: "",
+    purchasesDuringPeriod: "",
     category: "",
     price: "",
     count: "",
@@ -95,7 +97,7 @@ export default function UpdateProductModal({
   }
 
   return (
-    <div>
+    <div className="">
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -121,13 +123,7 @@ export default function UpdateProductModal({
               onChange={handleChange}
               className="w-full"
             />
-            <TextField
-              label="Description"
-              name="description"
-              value={values.description}
-              onChange={handleChange}
-              className="w-full"
-            />
+
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">Category</InputLabel>
               <Select
@@ -148,13 +144,22 @@ export default function UpdateProductModal({
                   })}
               </Select>
             </FormControl>
+
             <TextField
               label="Price"
-              name="price"
-              value={values.price}
+              name="Initial Inventory"
+              value={values.initialInventory}
               onChange={handleChange}
               className="w-full"
             />
+            <TextField
+              label="Purchases During Period"
+              name="purchasesDuringPeriod"
+              value={values.purchasesDuringPeriod}
+              onChange={handleChange}
+              className="w-full"
+            />
+
             <TextField
               label="Count"
               name="count"

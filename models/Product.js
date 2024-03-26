@@ -6,9 +6,6 @@ const productSchema = Schema(
       type: String,
       required: [true, "Please provide a valid name for the product"],
     },
-    description: {
-      type: String,
-    },
     slug: {
       type: String,
       unique: true,
@@ -23,11 +20,24 @@ const productSchema = Schema(
       type: String,
       default: "0",
     },
+    cost: {
+      type: String,
+      default: "0",
+    },
     count: {
       type: Number,
       default: 0,
     },
     minCount: {
+      type: Number,
+      default: 0,
+    },
+    // Additional fields for inventory and cost tracking
+    initialInventory: {
+      type: Number,
+      default: 0,
+    },
+    purchasesDuringPeriod: {
       type: Number,
       default: 0,
     },

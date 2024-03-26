@@ -134,7 +134,7 @@ export default function InvoiceDetail({ id }) {
                     key={p.product} // Assuming product has an 'id' property
                     product={p.product}
                     quantity={p.quantity}
-                    price={p.price}
+                    type={invoiceData.type}
                   />
                 ))}
               </tbody>

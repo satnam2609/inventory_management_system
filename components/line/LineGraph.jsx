@@ -21,7 +21,7 @@ export default function LineGraph({ data, enbaleArea, grid }) {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: -45,
-        legend: "Date of invoice",
+        legend: "Date",
         legendOffset: 36,
         legendPosition: "middle",
       }}

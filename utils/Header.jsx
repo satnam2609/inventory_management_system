@@ -8,7 +8,6 @@ export default function Headers({ text, description, full, x, y }) {
       <Typography fontSize={"3rem"} color={"#00573a"} className="font-bold">
         {text}
       </Typography>
-      <Typography color={"#121212"}>{description}</Typography>
     </div>
   );
 }

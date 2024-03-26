@@ -96,11 +96,7 @@ export default function POPage() {
       render: (_, record) =>
         data.length >= 1 ? (
           <div>
-            <OrderMoreModal
-              id={record._id}
-              price={parseInt(record.price * 0.85)}
-              category={record.category}
-            />
+            <OrderMoreModal id={record._id} category={record.category} />
           </div>
         ) : null,
     },

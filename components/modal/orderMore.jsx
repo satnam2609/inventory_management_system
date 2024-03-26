@@ -30,21 +30,25 @@ const style = {
   gap: "1rem",
 };
 
-export default function OrderMoreModal({ id, price }) {
+export default function OrderMoreModal({ id }) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [loading, setLoading] = useState(false);
-  const [count, setCount] = useState("");
+
   const [grandTotal, setGrandTotal] = useState(0);
   const { data: session } = useSession();
+
+  //
+  const [count, setCount] = useState("");
+  const [cost, setCost] = useState(0);
 
   function handleChange(ev) {
     setCount(ev.target.value);
   }
 
   useEffect(() => {
-    setGrandTotal(Math.round(price) * count);
+    setGrandTotal(Math.round(cost) * count);
   }, [count]);
 
   function handleSubmit(ev) {
@@ -52,11 +56,13 @@ export default function OrderMoreModal({ id, price }) {
 
     try {
       setLoading(true);
-      createorder(id, count, grandTotal).then((res) => {
-        if (res) {
-          message.success("Ordered successfully");
-        }
-      });
+      if (cost > 0) {
+        createorder(id, count, cost, grandTotal).then((res) => {
+          if (res) {
+            message.success("Ordered successfully");
+          }
+        });
+      }
 
       setLoading(false);
 
@@ -97,6 +103,12 @@ export default function OrderMoreModal({ id, price }) {
             >
               Order more <span className="font-bold">{id}</span>
             </Typography>
+            <TextField
+              label="Cost"
+              value={cost}
+              onChange={(ev) => setCost(ev.target.value)}
+              className="w-full"
+            />
             <TextField
               label="Quantity"
               value={count}

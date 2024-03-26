@@ -104,7 +104,7 @@ export default function InvoicePage() {
       render: (type) => <p>{type ? "Inventory order" : "Customer sell"}</p>,
     },
     {
-      title: "customer",
+      title: "Customer",
       dataInder: "email",
       render: (text) => <a>{text.email}</a>,
     },

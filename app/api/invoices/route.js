@@ -70,29 +70,29 @@ async function handleNormalInvoice(currentPage, perPage) {
   };
 }
 
-async function handleDateQueryInvoice(currentPage, perPage, start, end) {
-  await connectDb();
-  const dateRangeQuery = [];
-  if (start) {
-    dateRangeQuery.$gte = new Date(start);
-  }
-  if (end) {
-    dateRangeQuery.$lte = new Date(end);
-  }
+// async function handleDateQueryInvoice(currentPage, perPage, start, end) {
+//   await connectDb();
+//   const dateRangeQuery = [];
+//   if (start) {
+//     dateRangeQuery.$gte = new Date(start);
+//   }
+//   if (end) {
+//     dateRangeQuery.$lte = new Date(end);
+//   }
 
-  const invoices = await Invoice.find({
-    createdAt: dateRangeQuery,
-  });
+//   const invoices = await Invoice.find({
+//     createdAt: dateRangeQuery,
+//   });
 
-  const total = await Invoice.find({
-    createdAt: dateRangeQuery,
-  }).estimatedDocumentCount();
+//   const total = await Invoice.find({
+//     createdAt: dateRangeQuery,
+//   }).estimatedDocumentCount();
 
-  return {
-    invoices,
-    total: total,
-  };
-}
+//   return {
+//     invoices,
+//     total: total,
+//   };
+// }
 
 export async function PUT(request) {
   try {
@@ -100,14 +100,6 @@ export async function PUT(request) {
     let result;
     const perPage = 6;
     const currentPage = page || 1;
-    // if (timeRange) {
-    //   return;
-    // } else if (dateRange) {
-    //   return;
-    // } else {
-    //   result = await handleNormalInvoice(currentPage, perPage);
-    //   return NextResponse.json({ message: result, success: true });
-    // }
 
     if (startDate || endDate) {
       await connectDb();
@@ -159,12 +151,12 @@ export async function GET() {
   try {
     await connectDb();
     const invoices = await Invoice.find({ type: true });
-    const investedAmount = invoices.reduce((total, invoice) => {
-      total += invoice.grandTotal;
+    const netSalesUnit = invoices.reduce((total, invoice) => {
+      total += invoice.quantity;
       return total;
     }, 0);
 
-    return NextResponse.json({ message: investedAmount, success: true });
+    return NextResponse.json({ message: netSalesUnit, success: true });
   } catch (error) {
     console.log("Error", error);
     return NextResponse.json(

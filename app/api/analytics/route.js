@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import Category from "@/models/Category";
 import Product from "@/models/Product";
 import moment from "moment";
+import { getValues } from "../categories/[slug]/route";
 
 export async function POST(request) {
   try {
@@ -60,22 +61,41 @@ export async function POST(request) {
   }
 }
 
-export async function GET() {
+export async function PUT(request) {
   try {
-    await connectDb();
-    const invoices = await Invoice.find({
-      type: false,
-    });
-    const totalRevenue = Math.round(
-      invoices.reduce((total, invoice) => {
-        total += invoice.grandTotal;
-        return total;
-      }, 0)
-    );
+    const { startDate, endDate } = await request.json();
 
-    return NextResponse.json({ message: totalRevenue, success: true });
+    let netRevenue = 0,
+      netCogsCost = 0,
+      netGrossProfit = 0,
+      netAvgInventory = 0;
+    await connectDb();
+
+    const products = await Product.find({});
+
+    for (const product of products) {
+      const result = await getValues(product._id, startDate, endDate);
+
+      // Log the result for debugging
+
+      // Accumulate values
+      netCogsCost += parseFloat(result.cogsCost || 0);
+      netGrossProfit += parseFloat(result.grossProfit || 0);
+      netAvgInventory += parseFloat(result.averageInventory || 0);
+      netRevenue += parseFloat(result.revenue || 0);
+    }
+
+    return NextResponse.json({
+      message: {
+        netRevenue,
+        netCogsCost,
+        netGrossProfit,
+        netAvgInventory,
+      },
+      success: true,
+    });
   } catch (error) {
-    console.log("Error total revenue", error);
+    console.log("Analytics error", error);
     return NextResponse.json(
       { message: "Internal server error", success: false },
       { status: 500 }

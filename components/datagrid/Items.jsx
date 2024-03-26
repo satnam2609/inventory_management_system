@@ -2,22 +2,21 @@
 
 import { useEffect, useState } from "react";
 
-import { useRouter } from "next/navigation";
-import axios from "axios";
-import { Popconfirm, Spin, message } from "antd";
+import { Popconfirm, Spin, Tooltip, message } from "antd";
 
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import {
   deleteProduct,
   filteredProducts,
-  getProduct,
   getProductsByPagination,
 } from "@/functions/products";
 import DataTable from "@/utils/DataTable";
 import FlexBetween from "@/utils/FlexBetween";
 import UpdateProductModal from "../modal/UpdateProduct";
 import Link from "next/link";
+import { Add } from "@mui/icons-material";
+import OrderMoreModal from "../modal/orderMore";
 
 export default function ItemsDisplay({ isFiletered, setIsFiltered, category }) {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -150,19 +149,11 @@ export default function ItemsDisplay({ isFiletered, setIsFiltered, category }) {
       title: "Name",
       dataIndex: "name",
       render: (text) => (
-        <a>{text.split("").length > 15 ? text.slice(0, 15) + "..." : text}</a>
+        <a>{text.split("").length > 25 ? text.slice(0, 25) + "..." : text}</a>
       ),
       filterMode: "tree",
       filterSearch: true,
       onFilter: (value, record) => record.name.startsWith(value),
-      width: "12%",
-    },
-    {
-      title: "Description",
-      dataIndex: "description",
-      render: (text) => (
-        <a>{text.split("").length > 35 ? text.slice(0, 35) + "..." : text}</a>
-      ),
     },
 
     {
@@ -171,11 +162,20 @@ export default function ItemsDisplay({ isFiletered, setIsFiltered, category }) {
       render: (text) => <a>&#8377;{text}</a>,
     },
     {
+      title: "Cost",
+      dataIndex: "cost",
+      render: (text) => <a>&#8377;{text}</a>,
+    },
+    {
+      title: "Purchase period",
+      dataIndex: "purchasesDuringPeriod",
+    },
+    {
       title: "Count",
       dataIndex: "count",
     },
     {
-      title: "MF date",
+      title: "Purchased date",
       dataIndex: "createdAt",
     },
     {
@@ -184,6 +184,9 @@ export default function ItemsDisplay({ isFiletered, setIsFiltered, category }) {
       render: (_, record) =>
         data.length >= 1 ? (
           <FlexBetween>
+            <a>
+              <OrderMoreModal id={record._id} price={record.cost} />
+            </a>
             <Popconfirm
               okButtonProps={{
                 style: { backgroundColor: "#424242" },
