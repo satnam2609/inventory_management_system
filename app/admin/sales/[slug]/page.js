@@ -60,7 +60,7 @@ export default async function ProductSalePage({ params }) {
         <FlexBetween className="gap-2">
           <p className="text-xl">Gross margin</p>:
           <p className="text-3xl font-bold text-[#121212]">
-            &#8377;{(GrossProfit / Revenue).toFixed(2) * 100}%
+            {(GrossProfit / Revenue).toFixed(2) * 100}%
           </p>
         </FlexBetween>
         {/* Filter by time series */}

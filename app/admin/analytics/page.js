@@ -29,7 +29,11 @@ export default function AnalyticPage() {
       })
       .then(() => {
         loadData().then((res) => {
-          setData(res);
+          if (res instanceof Array) {
+            setData(res);
+          } else {
+            setData("None");
+          }
           setLoading(false);
         });
       })
@@ -81,7 +85,7 @@ export default function AnalyticPage() {
               })}
               onChange={(val) => setCategory(val)}
             />
-            <BarChart data={data} />
+            {data !== "None" ? <BarChart data={data} /> : ""}
           </div>
         )}
 

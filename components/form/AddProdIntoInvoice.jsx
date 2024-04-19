@@ -132,7 +132,8 @@ export default function AddProdIntoInvoice({
   function handleClick(value, record, key) {
     if (value) {
       setGrandTotal(
-        (prevVal) => prevVal + record.quantity * parseInt(record.price)
+        (prevVal) =>
+          prevVal + parseInt(record.quantity) * parseInt(record.price)
       );
       setProducts((prevData) => [
         ...prevData,
@@ -161,11 +162,11 @@ export default function AddProdIntoInvoice({
     let product = products.find((product) => product.key == key);
     if (product.quantity >= value) {
       setGrandTotal(
-        (prevVal) => parseFloat(prevVal) - parseFloat(product.price)
+        (prevVal) => parseFloat(prevVal) - value * parseFloat(product.price)
       );
     } else {
       setGrandTotal(
-        (prevVal) => parseFloat(prevVal) + parseFloat(product.price)
+        (prevVal) => parseFloat(prevVal) + value * parseFloat(product.price)
       );
     }
     product.quantity = value;
