@@ -94,6 +94,7 @@ export default function AddBillPage() {
         setProducts={setProducts}
         setGrandTotal={setGrandTotal}
       />
+      {console.log(grandTotal)}
     </div>
   );
 }

@@ -60,6 +60,7 @@ export default function AddProdIntoInvoice({
           return {
             ...arrObj,
             quantity: 1,
+            //changed from 1 to 0
             include: false,
             key: i + 1,
           };
@@ -75,6 +76,7 @@ export default function AddProdIntoInvoice({
           return {
             ...arrObj,
             quantity: 1,
+            //changed from 1 to 0
             include: false,
             key: i + 1,
           };
@@ -129,55 +131,147 @@ export default function AddProdIntoInvoice({
     }
   }
 
-  function handleClick(value, record, key) {
-    if (value) {
-      setGrandTotal(
-        (prevVal) =>
-          prevVal + parseInt(record.quantity) * parseInt(record.price)
-      );
-      setProducts((prevData) => [
-        ...prevData,
-        {
-          key: key,
-          product: record._id,
-          price: record.price,
-          quantity: record.quantity,
-          category: record.category,
-        },
-      ]);
-    } else {
-      const filtered = products.filter((item) => item.key != key);
-      setGrandTotal((prevVal) => prevVal - parseFloat(record.price));
-      setProducts(filtered);
-    }
+  //changed from here
 
-    const newData = [...data];
-    const index = newData.findIndex((item) => key === item.key);
-    const item = newData[index];
-    newData[index] = { ...item, include: value };
-    setData(newData);
+  // function handleClick(value, record, key) {
+  //   if (value) {
+  //     setGrandTotal(
+  //       (prevVal) =>
+  //         prevVal + parseInt(record.quantity) * parseInt(record.price)
+  //     );
+  //     setProducts((prevData) => [
+  //       ...prevData,
+  //       {
+  //         key: key,
+  //         product: record._id,
+  //         price: record.price,
+  //         quantity: record.quantity,
+  //         category: record.category,
+  //       },
+  //     ]);
+  //   } else {
+  //     const filtered = products.filter((item) => item.key != key);
+  //     setGrandTotal(
+  //       (prevVal) =>
+  //         prevVal - parseInt(record.quantity) * parseInt(record.price)
+  //     );
+  //     setProducts(filtered);
+  //   }
+
+  //   const newData = [...data];
+  //   const index = newData.findIndex((item) => key === item.key);
+  //   const item = newData[index];
+  //   newData[index] = { ...item, include: value };
+  //   setData(newData);
+  //   console.log("New Data", newData);
+  //   console.log("Grand Total");
+  // }
+
+  // function handleQuantityChange(value, key) {
+  //   console.log("value quantity", value);
+  //   let product = products.find((product) => product.key == key);
+  //   console.log("Products Quantity", product.quantity);
+  //   if (product.quantity >= value) {
+  //     setGrandTotal(
+  //       (prevVal) =>
+  //         parseFloat(prevVal) - parseFloat(value) * parseFloat(product.price)
+  //     );
+  //   } else {
+  //     setGrandTotal(
+  //       (prevVal) =>
+  //         parseFloat(prevVal) + parseFloat(value) * parseFloat(product.price)
+  //     );
+  //   }
+  //   product.quantity = value;
+  //   setProducts([...products]);
+
+  //   const newData = [...data];
+  //   const index = newData.findIndex((item) => key === item.key);
+  //   const item = newData[index];
+  //   newData[index] = { ...item, quantity: value };
+  //   setData(newData);
+  // }
+
+  //
+  function handleClick(value, record, key) {
+    const price = parseFloat(record.price);
+    const quantity = parseInt(record.quantity);
+
+    if (!isNaN(price) && !isNaN(quantity)) {
+      // Check if price and quantity are valid numbers
+      if (value) {
+        const productTotal = price * quantity;
+        setGrandTotal(
+          (prevVal) => (isNaN(prevVal) ? 0 : prevVal) + productTotal
+        ); // Ensure grand total is initialized properly
+        setProducts((prevData) => [
+          ...prevData,
+          {
+            key: key,
+            product: record._id,
+            price: record.price,
+            quantity: record.quantity,
+            category: record.category,
+          },
+        ]);
+      } else {
+        const filtered = products.filter((item) => item.key !== key);
+        const productTotal = price * quantity;
+        setGrandTotal(
+          (prevVal) => (isNaN(prevVal) ? 0 : prevVal) - productTotal
+        ); // Ensure grand total is initialized properly
+        setProducts(filtered);
+      }
+
+      const newData = data.map((item) =>
+        item.key === key ? { ...item, include: value } : item
+      );
+      setData(newData);
+    } else {
+      console.error("Invalid price or quantity:", price, quantity);
+    }
   }
 
   function handleQuantityChange(value, key) {
-    let product = products.find((product) => product.key == key);
-    if (product.quantity >= value) {
-      setGrandTotal(
-        (prevVal) => parseFloat(prevVal) - value * parseFloat(product.price)
+    const productIndex = products.findIndex(product => product.key === key);
+    const product = products[productIndex];
+    const oldQuantity = parseInt(product.quantity);
+    const newQuantity = parseInt(value);
+    const price = parseFloat(product.price);
+  
+    console.log("Old Quantity:", oldQuantity);
+    console.log("New Quantity:", newQuantity);
+    console.log("Price:", price);
+  
+    if (!isNaN(oldQuantity) && !isNaN(newQuantity) && !isNaN(price)) {
+      const oldTotal = price * oldQuantity;
+      const newTotal = price * newQuantity;
+  
+      console.log("Old Total:", oldTotal);
+      console.log("New Total:", newTotal);
+  
+      const deltaTotal = newTotal - oldTotal;
+  
+      console.log("Delta Total:", deltaTotal);
+  
+      setGrandTotal(prevTotal => {
+        const updatedTotal = (isNaN(prevTotal) ? 0 : prevTotal) + deltaTotal;
+        return updatedTotal < 0 ? 0 : updatedTotal;
+      });
+  
+      const updatedProducts = [...products];
+      updatedProducts[productIndex] = { ...product, quantity: newQuantity };
+      setProducts(updatedProducts);
+  
+      const newData = data.map(item =>
+        item.key === key ? { ...item, quantity: newQuantity } : item
       );
+      setData(newData);
     } else {
-      setGrandTotal(
-        (prevVal) => parseFloat(prevVal) + value * parseFloat(product.price)
-      );
+      console.error('Invalid price, old quantity, or new quantity:', price, oldQuantity, newQuantity);
     }
-    product.quantity = value;
-    setProducts([...products]);
-
-    const newData = [...data];
-    const index = newData.findIndex((item) => key === item.key);
-    const item = newData[index];
-    newData[index] = { ...item, quantity: value };
-    setData(newData);
   }
+  
 
   const columns = [
     {
