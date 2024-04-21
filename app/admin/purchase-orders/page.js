@@ -1,5 +1,7 @@
 "use client";
 
+const API = "http://15.206.174.36:8000/predict-sales/";
+
 import OrderMoreModal from "@/components/modal/orderMore";
 import { getRecentOrders, getThresholds } from "@/functions/po";
 import DataTable from "@/utils/DataTable";
@@ -19,6 +21,26 @@ export default function POPage() {
     total: dataLength,
   });
 
+  const [demadValues, setDemandValues] = useState([]);
+
+  async function getDemandValues() {
+    let response = await fetch(API, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        start_date: "2024-03-01",
+        end_date: "2024-04-01",
+      }),
+    });
+
+    if (response.ok) {
+      let resultArray = await response.json();
+      return resultArray;
+    }
+  }
+
   useEffect(() => {
     loadThresholds().then(({ invoices, total }) => {
       let newRes;
@@ -32,7 +54,16 @@ export default function POPage() {
       setData(newRes);
       setDataLength(total);
     });
+  }, [page.current, undefined]);
+
+  useEffect(() => {
+    getDemandValues().then((res) => {
+      setDemandValues(res);
+    });
   }, [page.current]);
+
+  console.log(data);
+
   async function loadThresholds() {
     const res = await getThresholds(page.current);
 
@@ -87,9 +118,15 @@ export default function POPage() {
       dataIndex: "createdAt",
     },
     {
+      title: "Demand",
+      dataIndex: "key",
+      render: (index) => <p>{demadValues[index + 5 * (page.current - 1)]}</p>,
+    },
+    {
       title: "Minimum count",
       dataIndex: "minCount",
     },
+
     {
       title: "Operation",
       dataIndex: "operation",
@@ -102,6 +139,8 @@ export default function POPage() {
     },
   ];
 
+  console.log(demadValues);
+
   return (
     <div className="w-full h-full">
       <FlexBetween className="px-3 py-3">
@@ -113,7 +152,7 @@ export default function POPage() {
         />
       </FlexBetween>
 
-      {data ? (
+      {
         <div className="w-full px-3 py-3">
           <p>Products that crossed threshold quantity</p>
           <DataTable
@@ -125,9 +164,7 @@ export default function POPage() {
             page={page}
           />
         </div>
-      ) : (
-        <div>NO products</div>
-      )}
+      }
     </div>
   );
 }

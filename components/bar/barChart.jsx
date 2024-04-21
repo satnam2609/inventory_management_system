@@ -10,7 +10,9 @@ import { ResponsiveBar } from "@nivo/bar";
 export const BarChart = ({ data }) => (
   <ResponsiveBar
     data={data}
-    keys={data ? Object.keys(data[0]).filter((key) => key !== "month") : null} // Exclude 'month' key
+    keys={
+      data ? Object.keys(data[0] || {}).filter((key) => key !== "month") : null
+    }
     indexBy="month"
     margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
     padding={0.5}

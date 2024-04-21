@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import FlexBetween from "@/utils/FlexBetween";
 import Headers from "@/utils/Header";
 
-import { getSalesByCategory, getValuesForCategory } from "./action";
+import { getSalesByCategory } from "./action"; //getValuesForCategory
 import { BarChart } from "@/components/bar/barChart";
 import { getCategories } from "@/functions/category";
 import { ConfigProvider, Select, Statistic } from "antd";
@@ -13,10 +13,10 @@ export default function AnalyticPage() {
   const [categories, setCategories] = useState([]);
   const [data, setData] = useState(null);
   const [category, setCategory] = useState("65a51ad9bee97a698a75c1df");
-  const [totalCOGS, setTotalCOGS] = useState(0);
-  const [totalRevenue, setTotalRevenue] = useState(0);
+  // const [totalCOGS, setTotalCOGS] = useState(0);
+  // const [totalRevenue, setTotalRevenue] = useState(0);
 
-  const [totalGrossProfit, setTotalGrossProfit] = useState(0);
+  // const [totalGrossProfit, setTotalGrossProfit] = useState(0);
   const [loading, setLoading] = useState(false);
 
   const [slug, setSlug] = useState("");
@@ -29,23 +29,20 @@ export default function AnalyticPage() {
       })
       .then(() => {
         loadData().then((res) => {
-          if (res instanceof Array) {
-            setData(res);
-          } else {
-            setData("None");
-          }
-          setLoading(false);
-        });
-      })
-      .then(() => {
-        getValues().then((res) => {
-          setTotalRevenue(res.totalRevenue);
+          setData(res);
 
-          setTotalGrossProfit(res.totalGrossProfit);
-          setTotalCOGS(res.totalCogsCost);
           setLoading(false);
         });
       });
+    // .then(() => {
+    //   getValues().then((res) => {
+    //     setTotalRevenue(res.totalRevenue);
+
+    //     setTotalGrossProfit(res.totalGrossProfit);
+    //     setTotalCOGS(res.totalCogsCost);
+    //     setLoading(false);
+    //   });
+    // });
   }, [category]);
 
   async function loadData() {
@@ -53,12 +50,12 @@ export default function AnalyticPage() {
     return result;
   }
 
-  async function getValues() {
-    const res = await getValuesForCategory(slug);
-    const { totalRevenue, totalCogsCost, totalGrossProfit, totalAvgInventory } =
-      res;
-    return { totalRevenue, totalCogsCost, totalGrossProfit };
-  }
+  // async function getValues() {
+  //   const res = await getValuesForCategory(slug);
+  //   const { totalRevenue, totalCogsCost, totalGrossProfit, totalAvgInventory } =
+  //     res;
+  //   return { totalRevenue, totalCogsCost, totalGrossProfit };
+  // }
   return (
     <div className="w-full h-full ">
       <FlexBetween className="px-4 py-3">
@@ -74,7 +71,7 @@ export default function AnalyticPage() {
         {loading ? (
           <p>...Loading</p>
         ) : (
-          <div className="h-[45vh] w-[50vw]">
+          <div className="h-[60vh] w-[70vw]">
             <Select
               value={category}
               options={categories.map((cat) => {
@@ -85,11 +82,11 @@ export default function AnalyticPage() {
               })}
               onChange={(val) => setCategory(val)}
             />
-            {data !== "None" ? <BarChart data={data} /> : ""}
+            <BarChart data={data} />
           </div>
         )}
 
-        <div className="flex flex-col space-y-4 items-start justify-end px-4 py-2">
+        {/* <div className="flex flex-col space-y-4 items-start justify-end px-4 py-2">
           <ConfigProvider
             theme={{
               components: {
@@ -128,7 +125,7 @@ export default function AnalyticPage() {
           >
             <Statistic title="Total Gross Profit" value={totalGrossProfit} />
           </ConfigProvider>
-        </div>
+        </div> */}
       </FlexBetween>
     </div>
   );

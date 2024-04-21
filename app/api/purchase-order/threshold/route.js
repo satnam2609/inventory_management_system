@@ -1,5 +1,4 @@
 import connectDb from "@/libs/config";
-import User from "@/models/User";
 import Product from "@/models/Product";
 import { NextResponse } from "next/server";
 
@@ -22,13 +21,9 @@ export async function POST(request) {
       { $limit: perPage },
     ]);
 
-    total = await Product.countDocuments([
-      {
-        $match: {
-          $expr: { $gte: ["$minCount", "$count"] },
-        },
-      },
-    ]);
+    total = await Product.countDocuments({
+      $expr: { $gte: ["$minCount", "$count"] },
+    });
 
     if (productsLists.length) {
       return NextResponse.json({
@@ -40,7 +35,7 @@ export async function POST(request) {
       });
     }
     return NextResponse.json({
-      message: "None product reached threshold",
+      message: "No products reached the threshold",
       success: true,
     });
   } catch (error) {
