@@ -8,11 +8,16 @@ import DataTable from "@/utils/DataTable";
 import FlexBetween from "@/utils/FlexBetween";
 import Headers from "@/utils/Header";
 import { useState, useEffect } from "react";
+import { DatePicker, ConfigProvider } from "antd";
+import moment from "moment";
+
+const { RangePicker } = DatePicker;
+
 export default function POPage() {
   const [data, setData] = useState([]);
 
   const [dataLength, setDataLength] = useState(1);
-
+  const [dateRange, setDateRange] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const [page, setPage] = useState({
@@ -30,8 +35,8 @@ export default function POPage() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        start_date: "2024-03-01",
-        end_date: "2024-04-01",
+        start_date: dateRange[0] ? dateRange[0] : moment().format("YYYY-MM-DD"),
+        end_date: dateRange[1] ? dateRange[1] : moment().format("YYYY-MM-DD"),
       }),
     });
 
@@ -40,6 +45,8 @@ export default function POPage() {
       return resultArray;
     }
   }
+
+  console.log("DateRange", dateRange);
 
   useEffect(() => {
     loadThresholds().then(({ invoices, total }) => {
@@ -60,7 +67,7 @@ export default function POPage() {
     getDemandValues().then((res) => {
       setDemandValues(res);
     });
-  }, [page.current]);
+  }, [dateRange, page.current]);
 
   console.log(data);
 
@@ -151,6 +158,21 @@ export default function POPage() {
           }
         />
       </FlexBetween>
+
+      <ConfigProvider
+        theme={{
+          components: {
+            DatePicker: {
+              padding: 20,
+            },
+          },
+        }}
+      >
+        <RangePicker
+          defaultValue
+          onChange={(_, values) => setDateRange(values)}
+        />
+      </ConfigProvider>
 
       {
         <div className="w-full px-3 py-3">
