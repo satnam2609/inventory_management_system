@@ -30,8 +30,8 @@ export async function POST(request) {
         ],
         grandTotal: grandTotal,
         type: true,
-        issuedBy: "65d703e991aa16b3147c15d8", //user._id,
-        email: "satnam@gmail.com", //user.email,
+        issuedBy: user._id, //user._id,
+        email: user.email, //user.email,
       });
 
       //If the product is new in the inventory then the initialInventory must be updated with the quantity bought

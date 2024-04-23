@@ -9,6 +9,7 @@ import { getValues } from "../categories/[slug]/route";
 export async function POST(request) {
   try {
     const { id } = await request.json();
+    console.log(id);
     let resultArray = [];
     const products = await Product.find({ category: id });
 
@@ -26,23 +27,25 @@ export async function POST(request) {
         invoices.forEach((invoice) => {
           const monthVal = moment(invoice.createdAt).format("MMMM");
 
+          const totalSales = invoice.products.reduce((total, p) => {
+            // Check if the product in the invoice matches the current product
+            if (p.product.toString() === product._id.toString()) {
+              return total + parseInt(p.quantity) * parseInt(p.price);
+            }
+            return total;
+          }, 0);
+
           // Check if the month already exists in resultArray
           const monthObject = resultArray.find((obj) => obj.month === monthVal);
 
           if (monthObject) {
             // If the month exists, update the sales for the product
-            monthObject[product.name] =
-              (monthObject[product.name] || 0) +
-              invoice.products.reduce((total, p) => {
-                return total + parseInt(p.quantity) * parseInt(p.price);
-              }, 0);
+            monthObject[product.name] = (monthObject[product.name] || 0) + totalSales;
           } else {
             // If the month doesn't exist, create a new object
             const salesObj = {
               month: monthVal,
-              [product.name]: invoice.products.reduce((total, p) => {
-                return total + parseInt(p.quantity) * parseInt(p.price);
-              }, 0),
+              [product.name]: totalSales,
             };
 
             resultArray.push(salesObj);
@@ -60,6 +63,36 @@ export async function POST(request) {
     );
   }
 }
+
+// export async function POST(request) {
+//   try {
+//     await connectDb();
+//     const { id } = await request.json();
+
+//     const products = await Product.find({ category: id }).sort({
+//       createdAt: -1,
+//     });
+
+//     for (let product in products) {
+//       let invoices = await Invoice.find({
+//         products: {
+//           $elemMatch: {
+//             product: product._id,
+//           },
+//         },
+//         type: false,
+//       }).sort({ createdAt: -1 });
+
+//       invoices.forEach();
+//     }
+//   } catch (error) {
+//     console.log("Analytics error", error);
+//     return NextResponse.json(
+//       { message: "Internal server error", success: false },
+//       { status: 500 }
+//     );
+//   }
+// }
 
 export async function PUT(request) {
   try {

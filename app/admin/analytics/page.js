@@ -12,7 +12,7 @@ import { ConfigProvider, Select, Statistic } from "antd";
 export default function AnalyticPage() {
   const [categories, setCategories] = useState([]);
   const [data, setData] = useState(null);
-  const [category, setCategory] = useState("65a51ad9bee97a698a75c1df");
+  const [category, setCategory] = useState("6612b39b5e19e3707d3ce72a");
   // const [totalCOGS, setTotalCOGS] = useState(0);
   // const [totalRevenue, setTotalRevenue] = useState(0);
 
