@@ -70,39 +70,30 @@ export async function PUT(request, { params }) {
 
     await connectDb();
 
-    //find the invoices with the product id in the products array and get the quantity multiplied by price value
     const invoices = await Invoice.find({
       products: { $elemMatch: { product: id } },
       type: false,
     }).sort({ createdAt: 1 });
 
-    //If the dateRange values are not null then we need to fetch the invoices by range and also the product wise sales
-
-    //If the value of code is 1 then that means we want to fetch the sales of current date
     if (code === "2" || code === 2) {
       salesData = invoices.reduce((result, invoice) => {
         const dateVal = new Date(invoice.createdAt).toISOString().split("T")[0];
         const dateKey = moment(dateVal.split("-")[1]).format("MMMM");
         const existingEntry = result.find((entry) => entry.x === dateKey);
 
+        const productTotal = invoice.products.reduce((total, product) => {
+          if (product.product.toString() === id.toString()) {
+            return total + parseInt(product.quantity) * parseInt(product.price);
+          }
+          return total; // Ensure to return a value even if the condition isn't met
+        }, 0);
+
         if (existingEntry) {
-          existingEntry.y += invoice.products.reduce((total, product) => {
-            if (product.product.toString() === id.toString()) {
-              return (
-                total + parseInt(product.quantity) * parseInt(product.price)
-              );
-            }
-          }, 0);
+          existingEntry.y += productTotal;
         } else {
           result.push({
             x: dateKey,
-            y: invoice.products.reduce((total, product) => {
-              if (product.product.toString() === id.toString()) {
-                return (
-                  total + parseInt(product.quantity) * parseInt(product.price)
-                );
-              }
-            }, 0),
+            y: productTotal,
           });
         }
 
@@ -111,27 +102,21 @@ export async function PUT(request, { params }) {
     } else if (code === "4" || code === 4) {
       salesData = invoices.reduce((result, invoice) => {
         const dateKey = new Date(invoice.createdAt).getFullYear();
-
         const existingEntry = result.find((entry) => entry.x === dateKey);
 
+        const productTotal = invoice.products.reduce((total, product) => {
+          if (product.product.toString() === id.toString()) {
+            return total + parseInt(product.quantity) * parseInt(product.price);
+          }
+          return total; // Ensure to return a value even if the condition isn't met
+        }, 0);
+
         if (existingEntry) {
-          existingEntry.y += invoice.products.reduce((total, product) => {
-            if (product.product.toString() === id.toString()) {
-              return (
-                total + parseInt(product.quantity) * parseInt(product.price)
-              );
-            }
-          }, 0);
+          existingEntry.y += productTotal;
         } else {
           result.push({
             x: dateKey,
-            y: invoice.products.reduce((total, product) => {
-              if (product.product.toString() === id.toString()) {
-                return (
-                  total + parseInt(product.quantity) * parseInt(product.price)
-                );
-              }
-            }, 0),
+            y: productTotal,
           });
         }
 
@@ -142,24 +127,19 @@ export async function PUT(request, { params }) {
         const dateKey = new Date(invoice.createdAt).toISOString().split("T")[0];
         const existingEntry = result.find((entry) => entry.x === dateKey);
 
+        const productTotal = invoice.products.reduce((total, product) => {
+          if (product.product.toString() === id.toString()) {
+            return total + parseInt(product.quantity) * parseInt(product.price);
+          }
+          return total; // Ensure to return a value even if the condition isn't met
+        }, 0);
+
         if (existingEntry) {
-          existingEntry.y += invoice.products.reduce((total, product) => {
-            if (product.product.toString() === id.toString()) {
-              return (
-                total + parseInt(product.quantity) * parseInt(product.price)
-              );
-            }
-          }, 0);
+          existingEntry.y += productTotal;
         } else {
           result.push({
             x: dateKey,
-            y: invoice.products.reduce((total, product) => {
-              if (product.product.toString() === id.toString()) {
-                return (
-                  total + parseInt(product.quantity) * parseInt(product.price)
-                );
-              }
-            }, 0),
+            y: productTotal,
           });
         }
 
