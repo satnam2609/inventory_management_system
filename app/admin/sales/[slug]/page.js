@@ -85,7 +85,7 @@ export default async function ProductSalePage({ params }) {
               {
                 id: "Instock",
                 label: "Not sold",
-                value: product.count,
+                value: product.initialInventory + product.purchasesDuringPeriod,
                 color: "hsl(135, 100%, 27%)",
               },
             ]}

@@ -44,7 +44,10 @@ export default function ItemsDisplay({ isFiletered, setIsFiltered, category }) {
         let newRes;
 
         newRes = products?.map((arrObj, i) => {
-          if (arrObj.minCount >= arrObj.count) {
+          if (
+            arrObj.minCount >=
+            arrObj.initialInventory + arrObj.purchasesDuringPeriod
+          ) {
             setBelowThreshold((prevVal) => [...prevVal, arrObj]);
           }
           return {
@@ -60,7 +63,10 @@ export default function ItemsDisplay({ isFiletered, setIsFiltered, category }) {
         let newRes;
 
         newRes = products?.map((arrObj, i) => {
-          if (arrObj.minCount > arrObj.count) {
+          if (
+            arrObj.minCount >=
+            arrObj.initialInventory + arrObj.purchasesDuringPeriod
+          ) {
             setBelowThreshold((prevVal) => [...prevVal, arrObj]);
           }
           return {
@@ -172,7 +178,12 @@ export default function ItemsDisplay({ isFiletered, setIsFiltered, category }) {
     },
     {
       title: "Count",
-      dataIndex: "count",
+      render: (_, record) => (
+        <p>
+          {parseInt(record.initialInventory) +
+            parseInt(record.purchasesDuringPeriod)}
+        </p>
+      ),
     },
     {
       title: "Purchased date",

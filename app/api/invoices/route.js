@@ -29,11 +29,37 @@ export async function POST(request) {
         let prodId = p.product;
         let count = parseInt(p.quantity);
         const product = await Product.findOne({ _id: prodId });
-        await Product.findOneAndUpdate(
-          { _id: prodId },
-          { count: product.count - count },
-          { new: true }
-        );
+
+        const initialInventory = product.initialInventory;
+        const purchasesDuringPeriod = product.purchasesDuringPeriod;
+
+        let updatedInitialInventory = initialInventory - count;
+        let updatedPurchasesDuringPeriod = purchasesDuringPeriod - count;
+
+        if (updatedPurchasesDuringPeriod >= 0) {
+          await Product.findOneAndUpdate(
+            { _id: prodId },
+            {
+              purchasesDuringPeriod: updatedPurchasesDuringPeriod,
+            },
+
+            { new: true }
+          );
+        } else if (
+          updatedPurchasesDuringPeriod < 0 &&
+          updatedInitialInventory >= 0
+        ) {
+          await Product.findOneAndUpdate(
+            { _id: prodId },
+            {
+              initialInventory: updatedInitialInventory,
+            },
+
+            { new: true }
+          );
+        } else {
+          throw new Error("Invalid quantity");
+        }
       });
 
       return NextResponse.json(
@@ -46,7 +72,7 @@ export async function POST(request) {
       success: false,
     });
   } catch (error) {
-    console.log("Failed to add invoice", error);
+    console.log("Failed to add invoice with an error:", error);
     return NextResponse.json(
       { message: "Internal server error", success: false },
       { status: 500 }

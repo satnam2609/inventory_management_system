@@ -14,7 +14,9 @@ export async function POST(request) {
     productsLists = await Product.aggregate([
       {
         $match: {
-          $expr: { $gte: ["$minCount", "$count"] },
+          $expr: {
+            $gte: ["$minCount", "$initialInventory" + "$purchasesDuringPeriod"],
+          },
         },
       },
       { $skip: (currentPage - 1) * perPage },
@@ -22,7 +24,9 @@ export async function POST(request) {
     ]);
 
     total = await Product.countDocuments({
-      $expr: { $gte: ["$minCount", "$count"] },
+      $expr: {
+        $gte: ["$minCount", "$initialInventory" + "$purchasesDuringPeriod"],
+      },
     });
 
     if (productsLists.length) {

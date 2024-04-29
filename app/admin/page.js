@@ -223,7 +223,7 @@ export default function AdminPage() {
             >
               <Statistic
                 title={"Days inventory outstanding"}
-                value={(totalCOGS / totalAverageInventory / 365).toFixed(2)}
+                value={(365 / (totalCOGS / totalAverageInventory)).toFixed(2)}
               />
             </ConfigProvider>
           </div>
@@ -240,7 +240,7 @@ export default function AdminPage() {
             >
               <Statistic
                 title={"Total COGS"}
-                value={totalCOGS}
+                value={totalCOGS.toFixed(2)}
                 prefix={<CurrencyRupee />}
               />
             </ConfigProvider>

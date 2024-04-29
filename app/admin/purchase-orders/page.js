@@ -10,6 +10,7 @@ import Headers from "@/utils/Header";
 import { useState, useEffect } from "react";
 import { DatePicker, ConfigProvider } from "antd";
 import moment from "moment";
+import { filteredProducts } from "@/functions/products";
 
 const { RangePicker } = DatePicker;
 
@@ -20,6 +21,8 @@ export default function POPage() {
   const [dateRange, setDateRange] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const [itemsLength, setItemsLength] = useState(0);
+
   const [page, setPage] = useState({
     current: 1,
     pageSize: 5,
@@ -27,6 +30,15 @@ export default function POPage() {
   });
 
   const [demadValues, setDemandValues] = useState([]);
+
+  async function loadFilteredProducts() {
+    const res = await filteredProducts(page.current, "");
+
+    return {
+      products: res.products,
+      total: res.total,
+    };
+  }
 
   async function getDemandValues() {
     let response = await fetch(API, {
@@ -49,15 +61,24 @@ export default function POPage() {
   console.log("DateRange", dateRange);
 
   useEffect(() => {
-    loadThresholds().then(({ invoices, total }) => {
+    loadFilteredProducts().then(({ products, total }) => {
       let newRes;
 
-      newRes = invoices?.map((arrObj, i) => {
-        return {
-          ...arrObj,
-          key: i + 1,
-        };
-      });
+      newRes = products
+        ?.map((arrObj, i) => {
+          return {
+            ...arrObj,
+            key: i + 1,
+          };
+        })
+        .sort((a, b) => {
+          return (
+            a.initialInventory +
+            a.purchasesDuringPeriod -
+            b.initialInventory -
+            b.purchasesDuringPeriod
+          );
+        });
       setData(newRes);
       setDataLength(total);
     });
@@ -71,14 +92,16 @@ export default function POPage() {
 
   console.log(data);
 
-  async function loadThresholds() {
-    const res = await getThresholds(page.current);
+  // async function loadThresholds() {
+  //   setLoading(false);
+  //   const res = await getThresholds(page.current);
+  //   setLoading(true);
 
-    return {
-      invoices: res.thresholds,
-      total: res.total,
-    };
-  }
+  //   return {
+  //     invoices: res.thresholds,
+  //     total: res.total,
+  //   };
+  // }
 
   function handleTableChange(value) {
     setPage({
@@ -92,7 +115,7 @@ export default function POPage() {
     }
   }
 
-  const columns = [
+  const columns = (isAll) => [
     {
       title: "ID",
       dataIndex: "_id",
@@ -118,7 +141,17 @@ export default function POPage() {
     {
       title: "Count",
       dataIndex: "count",
-      render: (text) => <p className="text-[red]">{text}</p>,
+      render: (text, record) =>
+        record.minCount >=
+        record.initialInventory + record.purchasesDuringPeriod ? (
+          <p className="text-[red]">
+            {record.initialInventory + record.purchasesDuringPeriod}
+          </p>
+        ) : (
+          <p className="text-[black]">
+            {record.initialInventory + record.purchasesDuringPeriod}
+          </p>
+        ),
     },
     {
       title: "MF date",
@@ -127,7 +160,13 @@ export default function POPage() {
     {
       title: "Demand",
       dataIndex: "key",
-      render: (index) => <p>{demadValues[index + 5 * (page.current - 1)]}</p>,
+      render: (index) => (
+        <p>
+          {isAll
+            ? demadValues[index + 5 * (_page.current - 1)]
+            : demadValues[index + 5 * (page.current - 1)]}
+        </p>
+      ),
     },
     {
       title: "Minimum count",
@@ -137,16 +176,13 @@ export default function POPage() {
     {
       title: "Operation",
       dataIndex: "operation",
-      render: (_, record) =>
-        data.length >= 1 ? (
-          <div>
-            <OrderMoreModal id={record._id} category={record.category} />
-          </div>
-        ) : null,
+      render: (_, record) => (
+        <div>
+          <OrderMoreModal id={record._id} category={record.category} />
+        </div>
+      ),
     },
   ];
-
-  console.log(demadValues);
 
   return (
     <div className="w-full h-full">
@@ -174,19 +210,35 @@ export default function POPage() {
         />
       </ConfigProvider>
 
-      {
+      {data ? (
         <div className="w-full px-3 py-3">
           <p>Products that crossed threshold quantity</p>
           <DataTable
-            loading={loading}
-            columns={columns}
+            columns={columns(false)}
             data={data}
             total={dataLength}
             handleTableChange={handleTableChange}
             page={page}
           />
         </div>
-      }
+      ) : (
+        ""
+      )}
+
+      {/* {products ? (
+        <div className="w-full px-3 py-3">
+          <p>Order more any products from the table</p>
+          <DataTable
+            columns={columns(true)}
+            data={products}
+            total={itemsLength}
+            handleTableChange={handleTableChangeForAll}
+            page={_page}
+          />
+        </div>
+      ) : (
+        ""
+      )} */}
     </div>
   );
 }

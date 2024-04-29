@@ -24,10 +24,10 @@ const productSchema = Schema(
       type: String,
       default: "0",
     },
-    count: {
-      type: Number,
-      default: 0,
-    },
+    // count: {
+    //   type: Number,
+    //   default: 0,
+    // },
     minCount: {
       type: Number,
       default: 0,

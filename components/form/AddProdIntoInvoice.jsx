@@ -233,45 +233,49 @@ export default function AddProdIntoInvoice({
   }
 
   function handleQuantityChange(value, key) {
-    const productIndex = products.findIndex(product => product.key === key);
+    const productIndex = products.findIndex((product) => product.key === key);
     const product = products[productIndex];
     const oldQuantity = parseInt(product.quantity);
     const newQuantity = parseInt(value);
     const price = parseFloat(product.price);
-  
+
     console.log("Old Quantity:", oldQuantity);
     console.log("New Quantity:", newQuantity);
     console.log("Price:", price);
-  
+
     if (!isNaN(oldQuantity) && !isNaN(newQuantity) && !isNaN(price)) {
       const oldTotal = price * oldQuantity;
       const newTotal = price * newQuantity;
-  
+
       console.log("Old Total:", oldTotal);
       console.log("New Total:", newTotal);
-  
+
       const deltaTotal = newTotal - oldTotal;
-  
+
       console.log("Delta Total:", deltaTotal);
-  
-      setGrandTotal(prevTotal => {
+
+      setGrandTotal((prevTotal) => {
         const updatedTotal = (isNaN(prevTotal) ? 0 : prevTotal) + deltaTotal;
         return updatedTotal < 0 ? 0 : updatedTotal;
       });
-  
+
       const updatedProducts = [...products];
       updatedProducts[productIndex] = { ...product, quantity: newQuantity };
       setProducts(updatedProducts);
-  
-      const newData = data.map(item =>
+
+      const newData = data.map((item) =>
         item.key === key ? { ...item, quantity: newQuantity } : item
       );
       setData(newData);
     } else {
-      console.error('Invalid price, old quantity, or new quantity:', price, oldQuantity, newQuantity);
+      console.error(
+        "Invalid price, old quantity, or new quantity:",
+        price,
+        oldQuantity,
+        newQuantity
+      );
     }
   }
-  
 
   const columns = [
     {
@@ -296,7 +300,11 @@ export default function AddProdIntoInvoice({
     },
     {
       title: "Count",
-      dataIndex: "count",
+      render: (_, record) => (
+        <a>
+          {parseInt(record.initialInventory + record.purchasesDuringPeriod)}
+        </a>
+      ),
     },
     {
       title: "Quantity",

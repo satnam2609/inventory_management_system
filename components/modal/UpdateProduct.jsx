@@ -56,7 +56,6 @@ export default function UpdateProductModal({
     purchasesDuringPeriod: "",
     category: "",
     price: "",
-    count: "",
     minCount: "",
   };
   const [values, setValues] = useState({ ...product });
@@ -144,29 +143,6 @@ export default function UpdateProductModal({
                   })}
               </Select>
             </FormControl>
-
-            <TextField
-              label="Price"
-              name="Initial Inventory"
-              value={values.initialInventory}
-              onChange={handleChange}
-              className="w-full"
-            />
-            <TextField
-              label="Purchases During Period"
-              name="purchasesDuringPeriod"
-              value={values.purchasesDuringPeriod}
-              onChange={handleChange}
-              className="w-full"
-            />
-
-            <TextField
-              label="Count"
-              name="count"
-              value={values.count}
-              onChange={handleChange}
-              className="w-full"
-            />
 
             <TextField
               label="Threshold value"

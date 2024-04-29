@@ -29,6 +29,11 @@ export async function POST(request) {
 
       return NextResponse.json({ message: result, success: true });
     }
+    const products = await Product.find({})
+      .skip((currentPage - 1) * perPage)
+      .limit(perPage);
+    const total = await Product.countDocuments({});
+    return NextResponse.json({ message: { products, total }, success: true });
   } catch (error) {
     console.log("Filter error", error);
     return NextResponse.json(

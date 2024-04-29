@@ -13,67 +13,94 @@ export async function POST(request) {
 
     await connectDb();
     if (session) {
-      //session
-      const prod = await Product.findOne({ _id: id });
       const user = await User.findOne({ email: session?.user?.email });
-
-      let retailerPrice = parseInt(prod.price * 0.85);
+      const prod = await Product.findOne({ _id: id });
 
       const invoice = await Invoice.create({
         products: [
           {
             product: id,
             quantity,
-            price: retailerPrice,
+            price: cost,
             category: prod.category,
           },
         ],
         grandTotal: grandTotal,
         type: true,
-        issuedBy: user._id, //user._id,
-        email: user.email, //user.email,
+        issuedBy: user._id,
+        email: user.email,
       });
 
-      //If the product is new in the inventory then the initialInventory must be updated with the quantity bought
-      if (prod.count === 0 || prod.count === "0") {
+      // Update product inventory
+      let updatedCount = prod.count + parseInt(quantity);
+      let updatedInitialInventory = prod.initialInventory;
+      let updatedPurchasesDuringPeriod = prod.purchasesDuringPeriod;
+      let initialInventory = prod.initialInventory;
+
+      if (initialInventory === 0 || initialInventory === "0") {
+        // If the product count is 0, treat it as a new product
         await Product.findOneAndUpdate(
           { _id: id },
           {
-            initialInventory: quantity,
-
-            count: parseInt(quantity),
+            initialInventory: updatedInitialInventory + parseInt(quantity), // Set initial inventory to the new quantity
+            // count: updatedCount,
             cost: String(cost),
           },
           { new: true }
         );
+      } else {
+        // Calculate total quantity sold
+        // const totalQuantitySold = await calculateTotalQuantitySold(id);
 
-        return NextResponse.json({ message: invoice, success: true });
+        // // Adjust initial inventory based on total quantity sold
+        // const adjustedInitialInventory =
+        //   totalQuantitySold > 0
+        //     ? prod.initialInventory - totalQuantitySold
+        //     : prod.initialInventory;
+
+        const currentMonth = new Date().getMonth();
+        const lastUpdatedMonth = new Date(prod.updatedAt).getMonth();
+
+        if (currentMonth !== lastUpdatedMonth) {
+          updatedPurchasesDuringPeriod = parseInt(quantity);
+        } else {
+          updatedPurchasesDuringPeriod += parseInt(quantity);
+        }
+
+        await Product.findOneAndUpdate(
+          { _id: id },
+          {
+            // count: updatedCount,
+            cost: String(cost),
+            purchasesDuringPeriod: updatedPurchasesDuringPeriod,
+          },
+          { new: true }
+        );
       }
-      //updating the count in the product
-      const check =
-        new Date(prod.updatedAt).getMonth() !== new Date().getMonth();
-
-      await Product.findOneAndUpdate(
-        { _id: id },
-        {
-          count: prod.count + parseInt(quantity),
-          cost: String(cost),
-          purchasesDuringPeriod: check
-            ? prod.purchasesDuringPeriod + quantity
-            : prod.purchasesDuringPeriod,
-        },
-
-        { new: true }
-      );
 
       return NextResponse.json({ message: invoice, success: true });
     }
     return NextResponse.json({ message: "Not Authorized user" });
   } catch (error) {
-    console.log("P.O error", error);
+    console.error("Purchase Order error:", error);
     return NextResponse.json(
       { message: "Internal server error", success: false },
       { status: 500 }
     );
   }
+}
+
+// Function to calculate the total quantity sold for a product
+async function calculateTotalQuantitySold(productId) {
+  const invoices = await Invoice.find({ "products.product": productId });
+  let totalQuantitySold = 0;
+  for (const invoice of invoices) {
+    for (const product of invoice.products) {
+      if (product.product.toString() === productId) {
+        totalQuantitySold +=
+          product.initialInventory + product.purchasesDuringPeriod;
+      }
+    }
+  }
+  return totalQuantitySold;
 }

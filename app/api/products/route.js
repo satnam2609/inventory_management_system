@@ -23,7 +23,6 @@ export async function POST(request) {
         description,
         category,
         price,
-        count: 0,
         minCount: parseInt(minCount),
       }),
       success: true,
