@@ -21,11 +21,9 @@ export default function POPage() {
   const [dateRange, setDateRange] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const [itemsLength, setItemsLength] = useState(0);
-
   const [page, setPage] = useState({
     current: 1,
-    pageSize: 5,
+    pageSize: 6,
     total: dataLength,
   });
 
@@ -82,7 +80,7 @@ export default function POPage() {
       setData(newRes);
       setDataLength(total);
     });
-  }, [page.current, undefined]);
+  }, [page.current]);
 
   useEffect(() => {
     getDemandValues().then((res) => {
@@ -91,17 +89,6 @@ export default function POPage() {
   }, [dateRange, page.current]);
 
   console.log(data);
-
-  // async function loadThresholds() {
-  //   setLoading(false);
-  //   const res = await getThresholds(page.current);
-  //   setLoading(true);
-
-  //   return {
-  //     invoices: res.thresholds,
-  //     total: res.total,
-  //   };
-  // }
 
   function handleTableChange(value) {
     setPage({
@@ -160,13 +147,7 @@ export default function POPage() {
     {
       title: "Demand",
       dataIndex: "key",
-      render: (index) => (
-        <p>
-          {isAll
-            ? demadValues[index + 5 * (_page.current - 1)]
-            : demadValues[index + 5 * (page.current - 1)]}
-        </p>
-      ),
+      render: (index) => <p>{demadValues[index + 5 * (page.current - 1)]}</p>,
     },
     {
       title: "Minimum count",
