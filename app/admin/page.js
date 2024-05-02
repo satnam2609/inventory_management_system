@@ -166,7 +166,7 @@ export default function AdminPage() {
             >
               <Statistic
                 title={"Total Gross profit"}
-                value={totalGrossProfit}
+                value={totalGrossProfit.toFixed(0)}
                 prefix={<CurrencyRupee />}
               />
             </ConfigProvider>
@@ -240,7 +240,7 @@ export default function AdminPage() {
             >
               <Statistic
                 title={"Total COGS"}
-                value={totalCOGS.toFixed(2)}
+                value={totalCOGS.toFixed(0)}
                 prefix={<CurrencyRupee />}
               />
             </ConfigProvider>
