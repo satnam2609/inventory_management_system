@@ -15,6 +15,8 @@ export default function ListsPage() {
   const [category, setCategory] = useState("");
   const [categories, setCategories] = useState([]);
   const [isFiletered, setIsFiltered] = useState(false);
+
+  
   useEffect(() => {
     getCategories().then((res) => {
       console.log(res);
