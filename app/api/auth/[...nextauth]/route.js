@@ -35,13 +35,11 @@ export const authOptions = {
         token.role = user.role;
         token.name = user.userName;
       }
-
       return token;
     },
     session({ session, token }) {
       session.user.role = token.role;
       session.user.name = token.name;
-
       return session;
     },
   },
