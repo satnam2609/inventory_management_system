@@ -10,12 +10,12 @@ export const authOptions = {
       name: "credentials",
       credentials: {},
       authorize: async (credentials) => {
+        // Basic loggin logic
         try {
           const { email, password } = credentials;
           await connectDb();
           const user = await User.findOne({ email });
           if (user) {
-            console.log(user);
             const match = await bcrypt.compare(password, user.password);
             if (match) {
               return user;
@@ -29,18 +29,19 @@ export const authOptions = {
     }),
   ],
   callbacks: {
-    jwt({ token, user }) {
+    jwt: ({ token, user }) => {
       if (user) {
+        token.id = user.id;
         token.role = user.role;
+        token.name = user.userName;
       }
 
       return token;
     },
-    async session({ session, token }) {
+    session({ session, token }) {
       session.user.role = token.role;
-      await connectDb();
-      const user = await User.findOne({ email: session.user.email });
-      session.user.name = user.userName;
+      session.user.name = token.name;
+
       return session;
     },
   },
