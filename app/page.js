@@ -1,14 +1,15 @@
-import SignInForm from "@/components/form/SignInForm";
-import { getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/[...nextauth]/route";
-import { redirect } from "next/navigation";
-import { currentUser } from "@/functions/auth";
+"use client";
 
-export default async function Home() {
-  const session = await getServerSession(authOptions);
-  if (session) {
-    const user = await currentUser(session.user?.email);
-    redirect(user.role === "admin" ? "/admin" : "/employee");
+import SignInForm from "@/components/form/SignInForm";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+
+export default function Home() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  if (status === "authenticated") {
+    router.push("/employee");
   }
 
   return (
