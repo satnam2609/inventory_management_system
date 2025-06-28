@@ -1,0 +1,67 @@
+import Snapshot from "@/models/snapshot";
+import connect from "@/libs/db";
+import { NextRequest, NextResponse } from "next/server";
+
+function generateRandomGreenShade() {
+  // Keep red and blue values low to ensure green dominance
+  const hue = 120; // Green hue
+  const saturation = Math.floor(Math.random() * 101); // Random saturation between 0 and 100
+  const lightness = Math.floor(Math.random() * 101); // Random lightness between 0 and 100
+
+  return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+}
+
+export async function GET(request: NextRequest): Promise<NextResponse> {
+  try {
+    require("@/models/category");
+    await connect();
+
+    const currentDate = new Date();
+
+    const prevMonthDate = currentDate;
+    prevMonthDate.setMonth(
+      currentDate.getMonth() === 0 ? 11 : currentDate.getMonth() - 1
+    );
+
+    const snapshots = await Snapshot.find({
+      createdAt: {
+        $gt: prevMonthDate,
+      },
+    }).populate({
+      path: "item",
+      populate: {
+        path: "category",
+      },
+    });
+
+    console.log(snapshots);
+
+    let data: any[] = [],
+      baseObj: any = {};
+    snapshots.forEach((snapshot: any) => {
+      let key = snapshot.item.category.name;
+      let value = baseObj[key] || 0;
+      baseObj[key] = value + snapshot.soldPrice * snapshot.soldAmount;
+    });
+
+    Object.entries(baseObj).forEach(([category, value]) => {
+      data.push({
+        id: category,
+        label: category,
+        value,
+        color: generateRandomGreenShade(),
+      });
+    });
+
+    return NextResponse.json({
+      message: data,
+      success: true,
+    });
+  } catch (error) {
+    console.log("Analytics API error: ", error);
+    return NextResponse.json(
+      { message: "Internal server error", success: false },
+      { status: 500 }
+    );
+  }
+}
