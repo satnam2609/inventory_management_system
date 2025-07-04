@@ -1,5 +1,6 @@
 "use client";
 import SignInForm from "@/components/forms/SignIn";
+import Loader from "@/utils/Loader";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -14,7 +15,9 @@ export default function Home() {
     }
   }, [status === "authenticated", router]);
   if (status === "loading") {
-    return <div>Loading...</div>;
+    return <div className="h-screen grid place-items-center">
+      <Loader/>
+    </div>;
   }
   return (
     <div className="h-screen grid place-items-center">

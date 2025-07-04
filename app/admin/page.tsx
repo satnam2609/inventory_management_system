@@ -1,7 +1,12 @@
 import BarChartComponent from "@/components/chart/bar/BarChartComponent";
 import PieComponent from "@/components/chart/pie/PieChartComponent";
 import Recents from "@/components/lists/Recents";
-import { getMetrics, getRecents, getRevenueVisual, getSalesByCategoryVisual } from "@/functions/analytics";
+import {
+  getMetrics,
+  getRecents,
+  getRevenueVisual,
+  getSalesByCategoryVisual,
+} from "@/functions/analytics";
 import Header from "@/utils/Header";
 import { Card } from "@mui/material";
 
@@ -25,11 +30,9 @@ export default async function AdminPage() {
 
     const { message } = await getRevenueVisual(true);
 
+    const { message: data } = await getRecents();
 
-    const {message:data}=await getRecents();
-
-
-    const {message:pieData}=await getSalesByCategoryVisual();
+    const { message: pieData } = await getSalesByCategoryVisual();
 
     function MetricCard({
       title,
@@ -58,7 +61,7 @@ export default async function AdminPage() {
           <div className="w-full">
             {isRevenue ? (
               <p
-                className={`text-start text-5xl ${
+                className={`text-start text-4xl ${
                   isFirst ? "text-[#e6ebe9]" : "text-[#0d0e0d]"
                 }`}
               >
@@ -66,7 +69,7 @@ export default async function AdminPage() {
               </p>
             ) : (
               <p
-                className={`text-start text-5xl ${
+                className={`text-start text-4xl ${
                   isFirst ? "text-[#e6ebe9]" : "text-[#0d0e0d]"
                 }`}
               >
@@ -96,10 +99,10 @@ export default async function AdminPage() {
           />
 
           <MetricCard
-            title="Turnover Ratio"
+            title="Average inventory"
             isFirst={false}
-            isRevenue={false}
-            metric={inventoryTurnoverRatio.toFixed(2)}
+            isRevenue={true}
+            metric={avgInventory}
           />
 
           <MetricCard
@@ -124,23 +127,21 @@ export default async function AdminPage() {
           />
 
           <div className="col-span-3 row-span-3 h-full">
-            <Recents rows={data}/>
+            <Recents rows={data} />
           </div>
         </div>
 
         <div className="grid grid-cols-2 grid-rows-3 gap-3 w-full">
-         
           <div className="row-span-2 bg-[#fff] rounded-2xl px-3">
-              
-             <PieComponent data={pieData}/>
+            <PieComponent data={pieData} />
           </div>
 
           <div className="row-span-2 grid grid-cols-2 gap-3">
             <MetricCard
-              title="Average inventory"
+              title="Turnover Ratio"
               isFirst={false}
-              isRevenue={true}
-              metric={avgInventory}
+              isRevenue={false}
+              metric={inventoryTurnoverRatio.toFixed(2)}
             />
 
             <MetricCard

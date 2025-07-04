@@ -5,6 +5,7 @@ import {
   Dashboard,
   Inventory,
   MoneyOffCsredRounded,
+  ReceiptOutlined,
 } from "@mui/icons-material";
 import { Avatar } from "@mui/material";
 import { useSession } from "next-auth/react";
@@ -64,6 +65,12 @@ export default function Drawer() {
             title="Dashboard"
             icon={<Dashboard />}
             route="/admin"
+          />
+
+          <FieldComponent
+            title="Invoices"
+            icon={<ReceiptOutlined />}
+            route="/admin/invoices"
           />
 
           <FieldComponent

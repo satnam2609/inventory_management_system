@@ -17,7 +17,7 @@ export default function Nav() {
   const handleChange=()=>setOpen(!open);
 
   const handleSignOut=()=>{
-    signOut()
+    signOut({callbackUrl:'/'})
   }
   return (
     <div className="mt-5 px-3 bg-[#ffffff] w-full rounded-full py-3">

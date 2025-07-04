@@ -4,6 +4,7 @@ import { CircularProgress } from "@mui/material";
 import { ChangeEvent, useState } from "react";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
+import Loader from "@/utils/Loader";
 
 type user = {
   email: string;
@@ -74,7 +75,7 @@ export default function SignInForm() {
       </div>
 
       {loading ? (
-        <CircularProgress className="text-[#0a0a0a] font-light text-sm" />
+        <Loader/>
       ) : (
         <button
           type="submit"
