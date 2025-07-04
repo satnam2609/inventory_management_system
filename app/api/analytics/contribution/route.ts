@@ -3,12 +3,12 @@ import connect from "@/libs/db";
 import { NextRequest, NextResponse } from "next/server";
 
 function generateRandomGreenShade() {
-  // Keep red and blue values low to ensure green dominance
-  const hue = 120; // Green hue
-  const saturation = Math.floor(Math.random() * 101); // Random saturation between 0 and 100
-  const lightness = Math.floor(Math.random() * 101); // Random lightness between 0 and 100
-
-  return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+   
+    const hue = 150;
+    const saturation = 90;
+    const lightness = Math.floor(Math.random() * 40) + 10;
+    return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+  
 }
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
