@@ -36,7 +36,7 @@ export async function GET(_request: NextRequest): Promise<NextResponse> {
 
     console.log(snapshots);
 
-    let data: any[] = [],
+    const data: any[] = [],
       baseObj: any = {};
     snapshots.forEach((snapshot: any) => {
       let key = snapshot.item.category.name;

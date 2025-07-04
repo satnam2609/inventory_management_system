@@ -10,7 +10,7 @@ import { signIn } from "next-auth/react";
 
 export default function SignUpForm() {
   const router = useRouter();
-  let initialState = {
+  const initialState = {
     userName: "",
     email: "",
     password: "",

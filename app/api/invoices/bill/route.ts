@@ -33,8 +33,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     const itemsArray = Object.entries(itemsObj);
 
-    let invoiceItems: any[] = [],
-      grandTotal = 0;
+    const invoiceItems: any[] = [];
+    let grandTotal=0;
 
     await Promise.all(
       itemsArray.map(async ([id, qty]) => {

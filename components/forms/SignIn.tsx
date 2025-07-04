@@ -11,7 +11,7 @@ type user = {
 };
 
 export default function SignInForm() {
-  let initialState: user = { email: "", password: "" };
+  const initialState: user = { email: "", password: "" };
   const [value, setValue] = useState<user>(initialState);
   const [loading, setLoading] = useState(false);
 

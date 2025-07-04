@@ -25,8 +25,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     await connect();
 
     const itemsArray = Object.entries(itemsObj);
-    let invoiceItems: any[] = [],
-      grandTotal = 0;
+    const invoiceItems: any[] = [];
+    let  grandTotal = 0;
 
     const user = await User.findOne({ email: session.user.email });
 

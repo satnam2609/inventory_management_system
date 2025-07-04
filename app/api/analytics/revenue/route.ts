@@ -21,13 +21,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const { isMonth } = await request.json();
 
-    const label=isMonth?"Month":"Year"
-
     await connect();
 
     const snapshots = await Snapshot.find({});
 
-    let data:Data[] = [],
+    const data:Data[] = [],
       baseObj: any = {};
 
     snapshots.forEach((snapshot: any) => {
