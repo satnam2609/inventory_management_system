@@ -38,7 +38,7 @@ export default function Nav() {
                     {open ? <ArrowDropUpIcon/> : <ArrowDropDownIcon/>} 
                 </button>
 
-                <div className={`absolute translate-x-10 translate-y-17 bg-[#0a0a0a0e] text-xl font-bold px-5 py-3 rounded-2xl ${!open && "invisible transition-all" } `}>
+                <div className={`absolute translate-x-10 translate-y-17 bg-[#ededed] text-xl font-bold px-5 py-3 rounded-2xl ${!open && "invisible transition-all" } `}>
                     <button className="flex items-center gap-2 cursor-pointer" onClick={handleSignOut}>
                         <LogoutIcon/>
                         <p>Sign Out</p>
