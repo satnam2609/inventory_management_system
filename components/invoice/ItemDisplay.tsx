@@ -4,7 +4,6 @@ import { Checkbox } from "@mui/material";
 import {
   SetStateAction,
   Dispatch,
-  ChangeEvent,
   useState,
   useEffect,
 } from "react";

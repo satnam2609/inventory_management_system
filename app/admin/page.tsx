@@ -7,8 +7,7 @@ import {
   getRevenueVisual,
   getSalesByCategoryVisual,
 } from "@/functions/analytics";
-import Header from "@/utils/Header";
-import { Card } from "@mui/material";
+
 
 export default async function AdminPage() {
   const { message: metricMessage, success } = await getMetrics();

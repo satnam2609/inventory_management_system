@@ -111,7 +111,6 @@ export default function ItemsPage() {
   function handleDelete(slug: string) {
     setLoading(true);
     deleteProduct(slug)
-      .then((res) => {})
       .then(() => {
         loadItems()
           .then((res) => {

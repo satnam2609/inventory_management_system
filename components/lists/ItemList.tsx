@@ -19,7 +19,8 @@ import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import { Dispatch, SetStateAction, useState } from "react";
 import ItemUpdateModal from "../modal/ItemUpdateModal";
 
-// ✅ Move outside to avoid hydration mismatch
+
+
 const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#0a0a0a",
@@ -138,7 +139,7 @@ export default function ItemList({
                   rowsPerPage={8}
                   page={page}
                   onPageChange={handleChangePage}
-                  rowsPerPageOptions={[]} // removes dropdown
+                  rowsPerPageOptions={[]}
                 />
               </TableRow>
             </TableFooter>

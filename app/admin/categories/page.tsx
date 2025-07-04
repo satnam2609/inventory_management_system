@@ -54,8 +54,7 @@ export default function CategoryPage() {
 
   function handleDelete(slug: string) {
     setLoading(true);
-    deleteCateogry(slug).then((res) => {
-      //   message.info(`${res.name} deleted`);
+    deleteCateogry(slug).then(() => {
       setLoading(false);
       setIsNewCategories(true);
     });
@@ -63,8 +62,7 @@ export default function CategoryPage() {
 
   function handleEdit(slug: string, value: string) {
     setLoading(true);
-    editCategory(slug, value).then((res) => {
-      //   message.success(`${res.name} udated`);
+    editCategory(slug, value).then(() => {
       setLoading(false);
       setIsNewCategories(true);
     });

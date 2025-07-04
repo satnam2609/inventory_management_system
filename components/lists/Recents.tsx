@@ -11,10 +11,10 @@ import {
   styled,
   tableCellClasses,
 } from "@mui/material";
-import { useState } from "react";
+ 
 
 export default function Recents({ rows }: { rows: any[] }) {
-  const [slug, setSlug] = useState<string>("");
+ 
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {

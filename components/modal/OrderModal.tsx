@@ -11,10 +11,7 @@ import {
 } from "@mui/material";
 import { Dispatch, SetStateAction, useState } from "react";
 
-type BillValues = {
-  product: string;
-  quantity: number;
-};
+
 
 export default function OrderModal({
   id,
@@ -32,11 +29,10 @@ export default function OrderModal({
   setFetch: Dispatch<SetStateAction<boolean>>;
 }) {
   const [quantity, setQuantity] = useState(0);
-  const [loading, setLoading] = useState(false);
 
   function handleSubmit(ev: any) {
     ev.preventDefault();
-    setLoading(true);
+    
     purchaseItem({[id]:quantity})
       .then((res) => {
         if (res.success) {
@@ -45,7 +41,7 @@ export default function OrderModal({
       })
       .catch((err) => console.log("Purchasing Item failed with error: ", err));
 
-    setLoading(false);
+     
     setQuantity(0)
     handleClose();
   }

@@ -19,7 +19,7 @@ import {
 import { Dispatch, SetStateAction, useState } from "react";
 import OrderModal from "../modal/OrderModal";
 
-// ✅ Move StyledTableCell outside the component
+ 
 const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#0a0a0a",

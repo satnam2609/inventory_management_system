@@ -1,7 +1,5 @@
 "use client";
-
-import InvoiceList from "@/components/lists/InvoiceList";
-import { getProductsByPagination } from "@/functions/item";
+ 
 import Header from "@/utils/Header";
 import { useState, useEffect } from "react";
 import { ConfigProvider, DatePicker, Space, Typography } from "antd";
@@ -9,20 +7,9 @@ import dayjs, { Dayjs } from "dayjs";
 import { getInvoicesByDateRange } from "@/functions/invoice";
 import InvoicesList from "@/components/lists/InvoicesList";
 
-type Item = {
-  _id: string;
-  name: string;
-  slug: string;
-  price: number;
+ 
 
-  minCount: number;
-  inventory: number;
-};
-
-type SelectedItem = {
-  _id: string;
-  quantity: number;
-};
+ 
 const { RangePicker } = DatePicker;
 
 const { Title } = Typography;

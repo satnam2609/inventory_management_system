@@ -4,7 +4,7 @@ import { ResponsiveBar } from "@nivo/bar";
 
 export default function BarChartComponent({ data }: { data: any }) {
   return (
-    <ResponsiveBar /* or Bar for fixed dimensions */
+    <ResponsiveBar  
       data={data}
       indexBy="month"
       keys={["revenue"]}

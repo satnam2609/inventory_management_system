@@ -41,7 +41,6 @@ export default function CategoryModal({
       setLoading(true);
       createCategory(name).then((res: any) => {
         if (res.success) {
-          //   message.success(`${res.message.name} created!`);
           setNew(true);
         }
       });
@@ -50,7 +49,6 @@ export default function CategoryModal({
       setName("");
       handleClose();
     } catch (error) {
-      //   message.error(res.message);
       setLoading(false);
       setName("");
       handleClose();
