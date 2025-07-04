@@ -11,7 +11,7 @@ function generateRandomGreenShade() {
   
 }
 
-export async function GET(request: NextRequest): Promise<NextResponse> {
+export async function GET(_request: NextRequest): Promise<NextResponse> {
   try {
     require("@/models/category");
     await connect();

@@ -4,7 +4,7 @@ import connect from "@/libs/db";
 import { NextRequest, NextResponse } from "next/server";
 import Item from "@/models/item";
 
-export async function GET(request: NextRequest): Promise<NextResponse> {
+export async function GET(_request: NextRequest): Promise<NextResponse> {
   try {
     await connect();
 

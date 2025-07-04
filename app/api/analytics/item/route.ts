@@ -4,7 +4,7 @@ import connect from "@/libs/db";
 import { NextRequest, NextResponse } from "next/server";
 import Invoice from "@/models/invoice";
 
-export async function GET(request: NextRequest): Promise<NextResponse> {
+export async function GET(_request: NextRequest): Promise<NextResponse> {
   try {
     await connect();
 
