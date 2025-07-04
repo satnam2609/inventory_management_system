@@ -94,7 +94,7 @@ export default function EmployeePage() {
           key={"top" + "right"}
         />
 
-        <div className="w-full px-4">
+        <div className="w-full px-4 h-[50vh] overflow-y-auto">
           {items.map((item: any) => {
             return (
               <ItemDisplay

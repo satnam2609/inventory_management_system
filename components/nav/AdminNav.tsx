@@ -9,6 +9,7 @@ import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import LogoutIcon from '@mui/icons-material/Logout';
 
 import { useState } from "react";
+import Image from "next/image";
 
 export default function Nav() {
   const { data: session } = useSession();
@@ -22,7 +23,10 @@ export default function Nav() {
   return (
     <div className="mt-5 px-3 bg-[#ffffff] w-full rounded-full py-3">
       <div className="flex items-center justify-between w-full px-5">
-        <div></div>
+        <div className="flex items-center gap-2 px-3">
+          <Image src={'/logo.png'} alt="logo" width={40} height={40}/>
+          <p className="text-3xl font-bold">Invexa</p>
+        </div>
 
         <div className="flex items-center gap-2">
           <Avatar
