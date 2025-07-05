@@ -5,10 +5,10 @@ import slugify from "slugify";
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ): Promise<NextResponse> {
   try {
-    const { slug } = params;
+    const { slug } = await params;
     const { name } = await request.json();
     await connect();
 
