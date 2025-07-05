@@ -11,7 +11,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     await connect();
 
     const total=await Item.find({}).estimatedDocumentCount();
-    require('@/models/category')
+    await import('@/models/category')
     const products = await Item.find({}).populate("category")
       .limit(perPage)
       .skip((currentPage-1)*perPage);

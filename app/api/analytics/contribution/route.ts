@@ -13,7 +13,7 @@ function generateRandomGreenShade() {
 
 export async function GET(_request: NextRequest): Promise<NextResponse> {
   try {
-    require("@/models/category");
+    await import("@/models/category");
     await connect();
 
     const currentDate = new Date();
