@@ -40,23 +40,24 @@ export async function GET(_request: NextRequest): Promise<NextResponse> {
 
     const margin = ((totalRevenue - totalCOGS) * 100) / totalRevenue;
 
-    const items = await Item.find({
-      inventory: {
-        $gt: 0,
-      },
-    });
+    const items = await Item.find({});
 
     const outOfStocks = items.reduce((val, item) => {
-      return val + item.inventory === 0 ? 1 : 0;
+      return val + (item.inventory === 0) ? 1 : 0;
     }, 0);
 
-    const inStocks= items.reduce((val, item) => {
+    const inStocks = items.reduce((val, item) => {
       return val + item.inventory;
-    },0);
+    }, 0);
 
-    const lowStocks=items.reduce((val,item)=>{
-      return val + item.inventory < item.minCount ? 1:0;
-    },0)
+    const lowStocks = items.reduce((val, item) => {
+      if (item.inventory < item.minCount){
+        return val + 1;
+      }
+      else{
+        return val;
+      }
+    }, 0);
 
     const currentInventory = items.reduce((inv, item) => {
       return inv + item.inventory * item.cost;
@@ -76,7 +77,7 @@ export async function GET(_request: NextRequest): Promise<NextResponse> {
         avgInventory: avgInventory || 0,
         outOfStocks,
         inStocks,
-        lowStocks
+        lowStocks,
       },
       success: true,
     });
