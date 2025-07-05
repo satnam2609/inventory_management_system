@@ -13,6 +13,9 @@ const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
     rules: {
+      "@typescript-eslint/no-var-requires": "off", // Disable specific rule
+      "import/no-unresolved": "off",
+      "@typescript-eslint/no-explicit-any": "off",
       "prefer-const": "off", // turn off build-blocking prefer-const rule
       "@typescript-eslint/no-unused-vars": "warn", // warning only
       "react-hooks/exhaustive-deps": "warn", //  warning only

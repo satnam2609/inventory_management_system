@@ -1,0 +1,22 @@
+File Path	Example Errors
+./app/admin/purchase-order/page.tsx	no-explicit-any
+./app/api/analytics/contribution/route.ts	no-explicit-any, no-require-imports
+./app/api/analytics/item/route.ts	no-explicit-any
+./app/api/analytics/revenue/route.ts	no-explicit-any
+./app/api/auth/[...nextauth]/route.ts	no-explicit-any
+./app/api/invoices/bill/route.ts	no-explicit-any
+./app/api/invoices/order/route.ts	no-explicit-any
+./app/api/items/pagination/route.ts	no-require-imports
+./app/employee/page.tsx	no-explicit-any
+./components/chart/bar/BarChartComponent.tsx	no-explicit-any
+./components/chart/pie/PieChartComponent.tsx	no-explicit-any
+./components/invoice/ItemDisplay.tsx	no-explicit-any
+./components/lists/CategoryList.tsx	no-explicit-any, no-unsafe-function-type
+./components/lists/InvoiceList.tsx	no-explicit-any
+./components/lists/InvoicesList.tsx	no-explicit-any
+./components/lists/ItemList.tsx	no-explicit-any
+./components/lists/Recents.tsx	no-explicit-any
+./components/modal/CategoryModal.tsx	no-explicit-any
+./components/modal/ItemModal.tsx	no-explicit-any
+./components/modal/ItemUpdateModal.tsx	no-explicit-any
+./components/modal/OrderModal.tsx	no-explicit-any
