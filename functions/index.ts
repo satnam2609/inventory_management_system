@@ -1,0 +1,1 @@
+export const BASE='https://invexa.vercel.app'
