@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import slugify from "slugify";
 
 export async function PUT(
-  request: NextResponse,
+  request: NextRequest,
   { params }: { params: { slug: string } }
 ): Promise<NextResponse> {
   try {
