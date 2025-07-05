@@ -1,1 +1,1 @@
-export const BASE='https://invexa.vercel.app'
+export const BASE='https://invexa-puce.vercel.app'
