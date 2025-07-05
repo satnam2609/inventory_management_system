@@ -1,13 +1,13 @@
 import axios from "axios";
-import { BASE } from "@/functions/index";
+ 
 
 export const getMetrics = async () => {
-  const res = await axios.get(BASE + "/api/analytics");
+  const res = await axios.get("/api/analytics");
   return res.data;
 };
 
 export const getRevenueVisual = async (isMonth: boolean) => {
-  const res = await axios.post(BASE + "/api/analytics/revenue", {
+  const res = await axios.post("/api/analytics/revenue", {
     isMonth,
   });
 
@@ -15,13 +15,13 @@ export const getRevenueVisual = async (isMonth: boolean) => {
 };
 
 export const getRecents = async () => {
-  const res = await axios.get(BASE + "/api/analytics/item", {});
+  const res = await axios.get("/api/analytics/item", {});
 
   return res.data;
 };
 
 export const getSalesByCategoryVisual = async () => {
-  const res = await axios.get(BASE + "/api/analytics/contribution", {});
+  const res = await axios.get("/api/analytics/contribution", {});
 
   return res.data;
 };

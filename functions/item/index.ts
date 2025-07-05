@@ -9,10 +9,9 @@ type Values = {
   minCount: number;
 };
 
-import { BASE } from "@/functions/index";
-
+ 
 export const addProduct = async (values: Values) => {
-  const res = await axios.post(BASE + "/api/items", {
+  const res = await axios.post("/api/items", {
     name: values.name,
     category: values.category,
     cost: values.cost,
@@ -24,13 +23,13 @@ export const addProduct = async (values: Values) => {
 };
 
 export const getProducts = async () => {
-  const res = await axios.get(BASE + "/api/items");
+  const res = await axios.get("/api/items");
 
   return res.data;
 };
 
 export const getProductsByPagination = async (page: number) => {
-  const res = await axios.post(BASE + "/api/items/pagination", {
+  const res = await axios.post("/api/items/pagination", {
     page,
   });
 
@@ -38,7 +37,7 @@ export const getProductsByPagination = async (page: number) => {
 };
 
 export const updateProduct = async (slug: string, values: Values) => {
-  const res = await axios.put(BASE + `/api/items/${slug}`, {
+  const res = await axios.put(`/api/items/${slug}`, {
     name: values.name,
     category: values.category,
     price: values.price,
@@ -50,18 +49,18 @@ export const updateProduct = async (slug: string, values: Values) => {
 };
 
 export const deleteProduct = async (slug: string) => {
-  const res = await axios.delete(BASE + `/api/items/${slug}`, {});
+  const res = await axios.delete(`/api/items/${slug}`, {});
   return res.data;
 };
 
 export const getProduct = async (slug: string) => {
-  const res = await axios.get(BASE + `/api/items/${slug}`);
+  const res = await axios.get(`/api/items/${slug}`);
 
   return res.data;
 };
 
 export const filterProduct = async (slug: string | null) => {
-  const res = await axios.get(BASE + `/api/items/filter?search=${slug}`);
+  const res = await axios.get(`/api/items/filter?search=${slug}`);
 
   return res.data;
 };

@@ -1,1 +1,0 @@
-export const BASE='https://invexa-puce.vercel.app'
