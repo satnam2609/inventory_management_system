@@ -10,29 +10,61 @@ import {
   Paper,
   styled,
   tableCellClasses,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
- 
 
 export default function Recents({ rows }: { rows: any[] }) {
- 
+  const theme = useTheme();
+  const isLaptop = useMediaQuery(theme.breakpoints.down("lg"));
+  const isDesktop = useMediaQuery(theme.breakpoints.up("lg"));
+
+  const dynamicHeight = isLaptop ? 280 : 379;
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-      backgroundColor: "#053625",
-      color: "#ededed",
-      position: "sticky",
-      top: 0,
-      zIndex: 2,
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: "#053625",
+    color: "#ededed",
+    fontSize: "0.75rem", // base
+    [theme.breakpoints.up("sm")]: {
+      fontSize: "0.875rem",
     },
-    [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
+    [theme.breakpoints.up("md")]: {
+      fontSize: "1rem",
     },
-  }));
+    position: "sticky",
+    top: 0,
+    zIndex: 2,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: "0.75rem",
+    [theme.breakpoints.up("sm")]: {
+      fontSize: "0.875rem",
+    },
+    [theme.breakpoints.up("md")]: {
+      fontSize: "1rem",
+    },
+  },
+}));
 
   return (
-    <Paper sx={{ width: "100%", height: 379, borderRadius: "10px", overflow: "hidden" }}>
-      <TableContainer sx={{ height: "100%", overflow: "auto" }}>
-        <Table stickyHeader aria-label="sticky table">
+    <Paper
+      sx={{
+        width: "100%",
+        height: dynamicHeight,
+        borderRadius: "10px",
+        overflow: "hidden",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <TableContainer
+        sx={{
+          height: "100%",
+          overflowY: "auto",
+        }}
+      >
+        <Table stickyHeader aria-label="recent transactions table">
           <TableHead>
             <TableRow>
               <StyledTableCell>ID</StyledTableCell>
@@ -42,6 +74,7 @@ export default function Recents({ rows }: { rows: any[] }) {
               <StyledTableCell>Transaction Date</StyledTableCell>
             </TableRow>
           </TableHead>
+
           <TableBody>
             {rows.map((row) => (
               <TableRow key={row._id}>

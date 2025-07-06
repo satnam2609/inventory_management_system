@@ -12,19 +12,31 @@ import {
   tableCellClasses,
 } from "@mui/material";
 
-const StyledTableCell = styled(TableCell)(() => ({
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: "#0a0a0a",
+    backgroundColor: "#053625",
     color: "#ededed",
+    fontSize: "0.75rem", // base
+    [theme.breakpoints.up("sm")]: {
+      fontSize: "0.875rem",
+    },
+    [theme.breakpoints.up("md")]: {
+      fontSize: "1rem",
+    },
     position: "sticky",
     top: 0,
     zIndex: 2,
   },
   [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
+    fontSize: "0.75rem",
+    [theme.breakpoints.up("sm")]: {
+      fontSize: "0.875rem",
+    },
+    [theme.breakpoints.up("md")]: {
+      fontSize: "1rem",
+    },
   },
 }));
-
 export default function InvoicesList({ rows }: { rows: any[] }) {
   return (
     <Paper

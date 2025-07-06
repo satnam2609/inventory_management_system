@@ -8,7 +8,7 @@ export default function BarChartComponent({ data }: { data: any }) {
       data={data}
       indexBy="month"
       keys={["revenue"]}
-      padding={0.8}
+      padding={0.3}
       labelSkipWidth={12}
       labelSkipHeight={12}
       borderRadius={36}

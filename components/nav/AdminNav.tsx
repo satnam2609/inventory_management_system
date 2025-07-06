@@ -2,56 +2,65 @@
 
 import { Avatar } from "@mui/material";
 import { signOut, useSession } from "next-auth/react";
-
-
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
-import LogoutIcon from '@mui/icons-material/Logout';
-
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import LogoutIcon from "@mui/icons-material/Logout";
 import { useState } from "react";
 import Image from "next/image";
 
 export default function Nav() {
   const { data: session } = useSession();
-  const [open,setOpen]=useState(false);
+  const [open, setOpen] = useState(false);
 
-  const handleChange=()=>setOpen(!open);
+  const handleToggleDropdown = () => setOpen((prev) => !prev);
+  const handleSignOut = () => signOut({ callbackUrl: "/" });
 
-  const handleSignOut=()=>{
-    signOut({callbackUrl:'/'})
-  }
   return (
-    <div className="mt-5 px-3 bg-[#ffffff] w-full rounded-full py-3">
-      <div className="flex items-center justify-between w-full px-5">
-        <div className="flex items-center gap-2 px-3">
-          <Image src={'/logo.png'} alt="logo" width={40} height={40}/>
-          <p className="text-3xl font-bold">Invexa</p>
+    <nav className="mt-5 px-4 bg-white w-full rounded-full py-3 shadow-md">
+      <div className="flex items-center justify-between flex-wrap px-5 gap-3">
+        {/* Logo */}
+        <div className="flex items-center gap-3 min-w-0">
+          <Image src="/logo.png" alt="logo" width={40} height={40} />
+          <p className="text-xl md:text-2xl font-bold truncate">Invexa</p>
         </div>
 
-        <div className="flex items-center gap-2">
+        {/* Profile */}
+        <div className="relative flex items-center gap-3 min-w-0">
           <Avatar
-            sx={{ bgcolor: "#053625", width: 50, height: 50, fontSize: 25 }}
+            sx={{ bgcolor: "#053625", width: 45, height: 45, fontSize: 20 }}
           >
-            {session?.user?.name.at(0)}
+            {session?.user?.name?.[0]}
           </Avatar>
-          <div>
-            <p className="font-bold text-2xl">{session?.user.name}</p>
-            <div className="flex items-center">
-                <p className="text-lg font-light text-[#413f3f]">{session?.user.email}</p>
-                <button className={`cursor-pointer transition-all font-bold`} onClick={handleChange}>
-                    {open ? <ArrowDropUpIcon/> : <ArrowDropDownIcon/>} 
-                </button>
 
-                <div className={`absolute translate-x-10 translate-y-17 bg-[#ededed] text-xl font-bold px-5 py-3 rounded-2xl ${!open && "invisible transition-all" } `}>
-                    <button className="flex items-center gap-2 cursor-pointer" onClick={handleSignOut}>
-                        <LogoutIcon/>
-                        <p>Sign Out</p>
-                    </button>
-                </div>
+          <div className="flex flex-col min-w-0">
+            <p className="font-semibold text-base md:text-lg truncate max-w-[150px]">
+              {session?.user?.name}
+            </p>
+
+            <div className="flex items-center gap-1 min-w-0">
+              <p className="text-sm text-gray-600 truncate max-w-[200px]">
+                {session?.user?.email}
+              </p>
+              <button className="cursor-pointer" onClick={handleToggleDropdown}>
+                {open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+              </button>
             </div>
           </div>
+
+          {/* Dropdown */}
+          {open && (
+            <div className="absolute right-0 top-[65px] bg-[#ededed] text-base font-semibold px-5 py-3 rounded-2xl shadow-xl z-50 min-w-max">
+              <button
+                className="flex items-center gap-2 text-[#111] hover:opacity-80"
+                onClick={handleSignOut}
+              >
+                <LogoutIcon />
+                <span>Sign Out</span>
+              </button>
+            </div>
+          )}
         </div>
       </div>
-    </div>
+    </nav>
   );
 }

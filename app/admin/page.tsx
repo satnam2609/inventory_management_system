@@ -106,9 +106,9 @@ export default function AdminPage() {
   const inventoryToSalesRatio = avgInventory / totalRevenue;
   const daysInventoryOutstanding = (avgInventory / totalCOGS) * 365;
 
-  return (
-    <div className="grid grid-cols-2 gap-3 py-6 w-full h-full">
-      <div className="grid grid-cols-3 grid-rows-4 gap-3 items-center">
+  return  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full">
+      {/* Left Section */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 grid-rows-4 gap-4">
         <MetricCard
           title="Total Revenue"
           isFirst={true}
@@ -145,17 +145,18 @@ export default function AdminPage() {
           isRevenue={true}
           metric={totalCOGS.toString()}
         />
-        <div className="col-span-3 row-span-3 h-full">
+        <div className="col-span-1 sm:col-span-2 lg:col-span-3 row-span-3 h-full">
           <Recents rows={recentData} />
         </div>
       </div>
 
-      <div className="grid grid-cols-2 grid-rows-3 gap-3 w-full">
-        <div className="row-span-2 bg-[#fff] rounded-2xl px-3">
+      {/* Right Section */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 grid-rows-3 gap-4">
+        <div className="row-span-2 bg-white rounded-2xl px-4 py-4">
           <PieComponent data={pieData} />
         </div>
 
-        <div className="row-span-2 grid grid-cols-2 gap-3">
+        <div className="row-span-2 grid grid-cols-2 gap-4">
           <MetricCard
             title="Turnover Ratio"
             isFirst={false}
@@ -182,10 +183,11 @@ export default function AdminPage() {
           />
         </div>
 
-        <div className="col-span-2 row-span-1 bg-[#fff] rounded-2xl">
+        <div className="col-span-1  sm:col-span-2 bg-white rounded-2xl px-4 py-4">
           <BarChartComponent data={barData} />
         </div>
       </div>
     </div>
-  );
+  
+
 }
