@@ -4,6 +4,7 @@ import { ChangeEvent, useState } from "react";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import Loader from "@/utils/Loader";
+import { Snackbar } from "@mui/material";
 
 type user = {
   email: string;
@@ -14,6 +15,8 @@ export default function SignInForm() {
   const initialState: user = { email: "", password: "" };
   const [value, setValue] = useState<user>(initialState);
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState<string>("Internal server error!");
+  const [open,setOpen]=useState(false);
 
   function handleChange(ev: ChangeEvent<HTMLInputElement>) {
     ev.preventDefault();
@@ -22,7 +25,7 @@ export default function SignInForm() {
 
   async function handleSubmit(ev: ChangeEvent<HTMLFormElement>) {
     ev.preventDefault();
-    console.log("Value is ",value)
+    console.log("Value is ", value);
     setLoading(true);
     try {
       const res = await signIn("credentials", {
@@ -34,6 +37,10 @@ export default function SignInForm() {
       if (res?.error) {
         console.log(res?.error);
         setLoading(false);
+        if (res.status === 401) {
+          setMessage("Invalid credentials");
+        }
+        setOpen(true);
 
         setValue(initialState);
         return;
@@ -62,6 +69,14 @@ export default function SignInForm() {
         />
       </div>
 
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={open}
+        onClose={() => setOpen(false)}
+        message={message}
+        key={"top" + "right"}
+      />
+
       <div className="flex justify-between items-center w-full space-x-2">
         <label htmlFor="password">Password</label>
         <input
@@ -74,7 +89,7 @@ export default function SignInForm() {
       </div>
 
       {loading ? (
-        <Loader/>
+        <Loader />
       ) : (
         <button
           type="submit"

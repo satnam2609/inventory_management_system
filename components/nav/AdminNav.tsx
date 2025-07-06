@@ -51,7 +51,7 @@ export default function Nav() {
           {open && (
             <div className="absolute right-0 top-[65px] bg-[#ededed] text-base font-semibold px-5 py-3 rounded-2xl shadow-xl z-50 min-w-max">
               <button
-                className="flex items-center gap-2 text-[#111] hover:opacity-80"
+                className="flex items-center gap-2 text-[#111] hover:opacity-80 cursor-pointer"
                 onClick={handleSignOut}
               >
                 <LogoutIcon />
