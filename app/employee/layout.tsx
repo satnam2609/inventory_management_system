@@ -6,11 +6,11 @@ export default function EmployeeLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="h-screen   flex items-center">
-      <div className="flex flex-col items-start h-screen w-full px-4">
+ 
+      <div className="flex flex-col items-start h-screen w-full px-4 gap-4 lg:gap-3">
         <Nav />
         {children}
       </div>
-    </div>
+  
   );
 }

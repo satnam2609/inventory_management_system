@@ -65,85 +65,96 @@ export default function EmployeePage() {
   }
 
   return (
-    <div className="px-3 py-4 grid grid-cols-4 w-full gap-2 h-full">
-      <Card className="flex flex-col items-center gap-14 h-full">
-        <div className="w-full flex flex-col items-start gap-4 px-4 py-4">
-          <p className="text-6xl font-bold text-start ">Products</p>
-          <TextField
-            label="Search"
-            value={query}
-            onChange={(ev: any) => setQuery(ev.target.value)}
-            slotProps={{
-              input: {
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchOutlined />
-                  </InputAdornment>
-                ),
-              },
-            }}
-            variant="standard"
-          />
-        </div>
+    <div className="px-3 grid grid-cols-1 sm:grid-cols-4 gap-4 w-full h-full">
+  {/* Left: Products Panel */}
+  <Card className="flex flex-col items-center h-full gap-10">
+    <div className="w-full flex flex-col items-start gap-4 px-4 py-4">
+      <p className="text-3xl sm:text-4xl md:text-5xl font-bold">Products</p>
+      <TextField
+        label="Search"
+        value={query}
+        onChange={(ev) => setQuery(ev.target.value)}
+        variant="standard"
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchOutlined />
+            </InputAdornment>
+          ),
+        }}
+      />
+    </div>
 
-        <Snackbar
-          anchorOrigin={{ vertical: "top", horizontal: "right" }}
-          open={open}
-          onClose={() => setOpen(false)}
-          message={message}
-          key={"top" + "right"}
+    <Snackbar
+      anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      open={open}
+      onClose={() => setOpen(false)}
+      message={message}
+      key={"top" + "right"}
+    />
+
+    {/* Scrollable Product List */}
+    <div className="w-full px-4 h-[45vh] sm:h-[60vh] overflow-y-auto">
+      {items.map((item: any) => (
+        <ItemDisplay
+          key={item._id}
+          item={item}
+          list={invoiceItems}
+          setList={setInvoiceItems}
+          setTotal={setTotal}
         />
+      ))}
+    </div>
+  </Card>
 
-        <div className="w-full px-4 h-[50vh] overflow-y-auto">
-          {items.map((item: any) => {
-            return (
-              <ItemDisplay
-                key={item._id}
-                item={item}
-                list={invoiceItems}
-                setList={setInvoiceItems}
-                setTotal={setTotal}
-              />
-            );
-          })}
+  {/* Right: Invoice + Total */}
+  <div className="sm:col-span-3 px-3 py-4 h-full flex flex-col items-start gap-10 w-full">
+    {/* Top Invoice Info */}
+    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full gap-6">
+      <div className="flex flex-col items-start gap-4">
+        <TextField
+          variant="standard"
+          label="Mobile number"
+          value={user}
+          onChange={(ev) => setUser(ev.target.value)}
+        />
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+          <p className="text-lg sm:text-xl">Transaction method:</p>
+          <p className="text-xl sm:text-2xl font-bold">Cash</p>
         </div>
-      </Card>
+      </div>
 
-      <div className="col-span-3 px-3 py-3 h-full flex flex-col items-center gap-10 w-full">
-        <div className="flex items-center justify-between w-full">
-          <div className="flex flex-col items-start justify-between gap-3">
-            <TextField id="variant" variant="standard" label="Mobile number" value={user} onChange={(ev)=>setUser(ev.target.value)}/>
-
-            <div className="flex items-center justify-between gap-3">
-              <p className="text-4xl">Transaction method : </p>
-              <p className="text-4xl font-bold">Cash </p>
-            </div>
-          </div>
-
-          <div className="flex flex-col items-start">
-            <p className="text-sm">Grand total </p>
-            <p className="text-5xl font-bold">
-              &#8377;{isNaN(total) ? "0" : total}
-            </p>
-          </div>
-        </div>
-
-        <div className="w-full flex flex-col items-start gap-2">
-          <p className="text-[#353333] text-3xl font-bold">
-            List of items to be added in the invoice
-          </p>
-          <InvoiceList
-            items={items}
-            itemsObj={invoiceItems}
-            setItemsObj={setInvoiceItems}
-            setTotal={setTotal}
-          />
-        </div>
-
-        <Button type="button" onClick={handleSubmit}>
-          Submit
-        </Button>
+      <div className="flex flex-col items-start">
+        <p className="text-xs sm:text-sm text-gray-600">Grand total</p>
+        <p className="text-3xl sm:text-4xl font-bold text-green-700">
+          ₹{isNaN(total) ? "0" : total}
+        </p>
       </div>
     </div>
+
+    {/* Invoice List */}
+    <div className="w-full flex flex-col items-start gap-3">
+      <p className="text-xl sm:text-2xl font-semibold text-gray-800">
+        List of items to be added in the invoice
+      </p>
+      <InvoiceList
+        items={items}
+        itemsObj={invoiceItems}
+        setItemsObj={setInvoiceItems}
+        setTotal={setTotal}
+      />
+    </div>
+
+    {/* Submit */}
+    <Button
+      type="button"
+      onClick={handleSubmit}
+      className="self-start text-lg font-bold"
+    >
+      Submit
+    </Button>
+  </div>
+</div>
+
   );
 }
